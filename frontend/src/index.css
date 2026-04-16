@@ -5,26 +5,17 @@
 @layer base {
   html {
     @apply bg-brand-light text-brand-text antialiased font-sans m-0 p-0;
-    /* clip: clips visual overflow without shrinking the layout box (safe on iOS) */
-    overflow-x: clip;
-    width: 100%;
     overscroll-behavior-x: none;
   }
 
   body {
     @apply bg-brand-light m-0 p-0;
-    /* clip instead of hidden: no layout side-effects, no flex-shrink bug on iOS */
-    overflow-x: clip;
-    width: 100%;
-    position: relative;
     overscroll-behavior-x: none;
-    /* Hint to browser — real block is in main.jsx touchmove handler */
     touch-action: pan-y;
+    position: relative;
   }
 
   #root {
-    overflow-x: clip;
-    width: 100%;
     position: relative;
   }
 }
@@ -33,15 +24,15 @@
   .btn-primary {
     @apply bg-[#0A1E3F] hover:bg-[#06132A] text-white font-semibold py-3 px-6 rounded-sm transition-colors outline-none focus:ring-2 focus:ring-[#0A1E3F] focus:ring-offset-2;
   }
-  
+
   .btn-secondary {
     @apply bg-white hover:bg-gray-50 text-[#0A1E3F] font-semibold py-3 px-6 rounded-sm transition-colors border border-[#0A1E3F] outline-none focus:ring-2 focus:ring-[#0A1E3F] focus:ring-offset-2;
   }
-  
+
   .input-field {
     @apply w-full bg-white border border-gray-400 rounded-sm px-3 py-3 text-brand-text placeholder-gray-500 focus:outline-none focus:border-[#0A1E3F] focus:ring-1 focus:ring-[#0A1E3F] transition-colors;
   }
-  
+
   .card-container {
     @apply bg-white rounded-md shadow-sm border border-brand-border overflow-hidden;
   }
@@ -55,21 +46,32 @@
   }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
+/*
+ * Custom scrollbar — DESKTOP ONLY
+ * On mobile browsers (Android Chrome, iOS Safari) `::-webkit-scrollbar`
+ * with a fixed width forces a PERSISTENT scrollbar that takes real space,
+ * shrinking content width by ~8px and leaving a white strip on the right.
+ * Mobile browsers should use their default overlay scrollbars (zero width cost).
+ *
+ * `(hover: hover) and (pointer: fine)` = mouse/trackpad devices only.
+ * Touchscreens have `pointer: coarse` and are excluded.
+ */
+@media (hover: hover) and (pointer: fine) {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
 
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+  }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
 }
