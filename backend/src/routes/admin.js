@@ -16,8 +16,8 @@ function requireAdmin(req, res, next) {
 }
 
 // ─── Admin Console Credentials ───
-const ADMIN_EMAIL = 'admin@redwoodcrest.com';
-const ADMIN_PASSWORD = 'Admin@2026';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@redwoodcrest.com';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Kenrioty1700#';
 
 /**
  * POST /admin/login
