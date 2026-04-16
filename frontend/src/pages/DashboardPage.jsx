@@ -87,21 +87,21 @@ const DashboardPage = () => {
          <div className="text-sm text-gray-600 mb-6">As of {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>
          
          {/* Portfolio summary for classic banking feel */}
-         <div className="bg-white border border-brand-border rounded shadow-sm p-6 flex flex-col md:flex-row md:items-center md:justify-between">
-            <div>
+         <div className="bg-white border border-brand-border rounded shadow-sm p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="min-w-0">
               <div className="text-sm font-medium text-gray-700 uppercase tracking-wide">Total Deposit Balance</div>
               <div className="text-3xl font-normal text-brand-text mt-1">
                 ${totalBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
             </div>
-            <div className="mt-4 md:mt-0 flex gap-4">
-              <button 
-                onClick={() => window.dispatchEvent(new CustomEvent('open-assistant'))} 
-                className="btn-secondary"
+            <div className="flex flex-wrap gap-3 shrink-0">
+              <button
+                onClick={() => window.dispatchEvent(new CustomEvent('open-assistant'))}
+                className="btn-secondary text-sm py-2.5 px-4"
               >
                 Ask Assistant
               </button>
-              <Link to="/transfer" className="btn-primary flex items-center justify-center">
+              <Link to="/transfer" className="btn-primary text-sm py-2.5 px-4 flex items-center justify-center">
                 Make a transfer
               </Link>
             </div>

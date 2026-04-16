@@ -3,14 +3,36 @@
 @tailwind utilities;
 
 @layer base {
-  html, body {
+  /* ── Prevent horizontal scroll on ALL browsers including iOS Safari ── */
+  html {
     @apply bg-brand-light text-brand-text antialiased font-sans m-0 p-0;
     overflow-x: hidden;
-    max-width: 100vw;
+    width: 100%;
+    /* overscroll-behavior blocks elastic/rubber-band horizontal scroll */
+    overscroll-behavior-x: none;
   }
+
+  body {
+    @apply bg-brand-light m-0 p-0;
+    overflow-x: hidden;
+    width: 100%;
+    /* position: relative turns body into a real containing block on iOS */
+    position: relative;
+    overscroll-behavior-x: none;
+  }
+
   #root {
     overflow-x: hidden;
-    max-width: 100vw;
+    width: 100%;
+    position: relative;
+  }
+
+  /* ── iOS Safari specific: -webkit-touch-callout guard ── */
+  @supports (-webkit-touch-callout: none) {
+    body {
+      /* Tells iOS the body is not the horizontal scroller */
+      -webkit-overflow-scrolling: auto;
+    }
   }
 }
 
