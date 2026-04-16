@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { useAuthStore } from './store/useAuthStore';
 import LoginPage from './pages/LoginPage';
@@ -31,48 +31,6 @@ import Footer from './components/Footer';
 import SmartAssistant from './components/SmartAssistant';
 import LiveChat from './components/LiveChat';
 
-/* ── TEMP DEBUG OVERLAY ─────────────────────────────────────────────────
-   Shows actual computed widths on the device screen so we can find
-   exactly which layer is narrower than the viewport.
-   REMOVE after diagnosis is done.
-   ──────────────────────────────────────────────────────────────────── */
-function WidthDebug() {
-  const [info, setInfo] = useState('');
-  useEffect(() => {
-    const measure = () => {
-      const vw   = window.innerWidth;
-      const docW = document.documentElement.offsetWidth;
-      const bodyW = document.body.offsetWidth;
-      const rootW = document.getElementById('root')?.offsetWidth ?? '?';
-      // Find the ProtectedRoute wrapper
-      const wrapper = document.querySelector('[data-layout="protected"]');
-      const wrapW = wrapper?.offsetWidth ?? '?';
-      // Find the header
-      const hdr = document.querySelector('header');
-      const hdrW = hdr?.offsetWidth ?? '?';
-      setInfo(
-        `innerW:${vw}  doc:${docW}  body:${bodyW}  root:${rootW}  wrapper:${wrapW}  header:${hdrW}`
-      );
-    };
-    // Wait a moment for layout to settle
-    const t = setTimeout(measure, 800);
-    return () => clearTimeout(t);
-  }, []);
-
-  if (!info) return null;
-  return (
-    <div style={{
-      position: 'fixed', top: 80, left: 0, right: 0, zIndex: 99999,
-      background: 'rgba(220,0,0,0.92)', color: '#fff',
-      fontSize: '11px', fontFamily: 'monospace',
-      padding: '6px 8px', lineHeight: 1.5,
-      wordBreak: 'break-all', pointerEvents: 'none'
-    }}>
-      {info}
-    </div>
-  );
-}
-
 const ProtectedRoute = () => {
   const { isAuthenticated, isLoading } = useAuthStore();
 
@@ -80,8 +38,7 @@ const ProtectedRoute = () => {
   if (!isAuthenticated) return <Navigate to="/login" replace />;
 
   return (
-    <div data-layout="protected" className="flex flex-col min-h-screen bg-brand-light w-full">
-      <WidthDebug />
+    <div className="flex flex-col min-h-screen bg-brand-light" style={{ width: '100vw', maxWidth: '100%' }}>
       <TopNav />
       <main className="flex-1 w-full max-w-6xl mx-auto px-4 md:px-8 py-8 min-w-0">
          <Outlet />
