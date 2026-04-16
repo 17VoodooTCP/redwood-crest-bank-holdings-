@@ -53,16 +53,28 @@
 }
 
 /*
- * Custom scrollbar — DESKTOP ONLY
- * On mobile browsers (Android Chrome, iOS Safari) `::-webkit-scrollbar`
- * with a fixed width forces a PERSISTENT scrollbar that takes real space,
- * shrinking content width by ~8px and leaving a white strip on the right.
- * Mobile browsers should use their default overlay scrollbars (zero width cost).
+ * FORCE zero-width scrollbar on ALL screens under 1280px.
  *
- * `(hover: hover) and (pointer: fine)` = mouse/trackpad devices only.
- * Touchscreens have `pointer: coarse` and are excluded.
+ * Problem: Samsung Galaxy devices with S-Pen report BOTH pointer:coarse
+ * (touch) AND pointer:fine (stylus) + hover:hover (stylus can hover).
+ * The previous  @media (hover:hover) and (pointer:fine)  guard matched
+ * Samsung S-Pen phones and showed the 8px persistent scrollbar on mobile,
+ * which shrank the layout width and left a white gap on the right side.
+ *
+ * Fix: explicitly zero out the scrollbar on anything narrower than a
+ * typical desktop (< 1280px), then re-apply the nice scrollbar above
+ * that width with the original hover/fine-pointer guard.
  */
-@media (hover: hover) and (pointer: fine) {
+@media (max-width: 1279px) {
+  ::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important;
+  }
+}
+
+/* Custom scrollbar — large desktop screens only */
+@media (hover: hover) and (pointer: fine) and (min-width: 1280px) {
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
