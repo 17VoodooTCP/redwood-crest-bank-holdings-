@@ -1,0 +1,180 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  email         String    @unique
+  password      String
+  firstName     String
+  lastName      String
+  phoneNumber   String?
+  address       String?
+  city          String?
+  state         String?
+  zipCode       String?
+  ssnLast4      String?
+  twoFASecret   String?
+  twoFAEnabled  Boolean   @default(false)
+  isAdmin       Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]
+  messages      Message[]
+}
+
+model Account {
+  id               String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String      @db.ObjectId
+  user             User        @relation(fields: [userId], references: [id])
+  type             String      // CHECKING | SAVINGS | CREDIT | HELOC
+  name             String
+  accountNumber    String      // last 4 digits shown to user
+  balance          Float       @default(0)
+  availableBalance Float       @default(0)
+  creditLimit      Float?      // only for credit accounts
+  minimumPayment   Float?      // only for credit accounts
+  statementBalance Float?      // only for credit accounts
+  nextPaymentDue   String?     // date string
+  isActive         Boolean     @default(true)
+  isBlocked        Boolean     @default(false)
+  blockReason      String?
+  expiryDate       String?     // for credit/HELOC cards (e.g. "04/28")
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  transactions        Transaction[]   @relation("AccountTransactions")
+  outgoingTransfers   Transfer[]      @relation("FromAccount")
+  incomingTransfers   Transfer[]      @relation("ToAccount")
+  outgoingPayments    Payment[]       @relation("PayFromAccount")
+  creditPayments      Payment[]       @relation("CreditAccount")
+  wireTransfers       WireTransfer[]  @relation("WireFromAccount")
+}
+
+model Transaction {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  accountId   String   @db.ObjectId
+  account     Account  @relation("AccountTransactions", fields: [accountId], references: [id])
+  description String
+  amount      Float    // positive = credit, negative = debit
+  date        DateTime @default(now())
+  category    String   @default("Other")
+  pending     Boolean  @default(false)
+  merchant    String?
+  createdAt   DateTime @default(now())
+}
+
+model Transfer {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  fromAccountId   String   @db.ObjectId
+  fromAccount     Account  @relation("FromAccount", fields: [fromAccountId], references: [id])
+  toAccountId     String   @db.ObjectId
+  toAccount       Account  @relation("ToAccount", fields: [toAccountId], references: [id])
+  amount          Float
+  status          String   @default("COMPLETED") // COMPLETED | PENDING | FAILED
+  createdAt       DateTime @default(now())
+}
+
+model Payment {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  creditAccountId   String   @db.ObjectId
+  creditAccount     Account  @relation("CreditAccount", fields: [creditAccountId], references: [id])
+  fromAccountId     String   @db.ObjectId
+  fromAccount       Account  @relation("PayFromAccount", fields: [fromAccountId], references: [id])
+  amount            Float
+  paymentType       String   // FIXED | MINIMUM | STATEMENT | CURRENT
+  status            String   @default("COMPLETED")
+  createdAt         DateTime @default(now())
+}
+
+model WireTransfer {
+  id                   String   @id @default(auto()) @map("_id") @db.ObjectId
+  fromAccountId        String   @db.ObjectId
+  fromAccount          Account  @relation("WireFromAccount", fields: [fromAccountId], references: [id])
+  type                 String   // domestic | international
+  amount               Float
+  fee                  Float    @default(25.00)
+  recipientName        String
+  routingNumber        String?  // domestic
+  accountNumber        String?  // domestic
+  bankName             String?  // domestic
+  swiftCode            String?  // international
+  iban                 String?  // international
+  recipientCountry     String?  // international
+  recipientAddress     String?  // international
+  recipientBankAddress String?  // international
+  currency             String   @default("USD")
+  memo                 String?
+  status               String   @default("PENDING") // PENDING | PROCESSING | COMPLETED | FAILED
+  createdAt            DateTime @default(now())
+}
+
+model Message {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id])
+  subject     String
+  body        String
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model ChatSession {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String?       @db.ObjectId
+  customerName  String?
+  customerEmail String?
+  status        String        @default("bot") // bot | waiting | active | closed
+  agentId       String?
+  agentName     String?
+  ipAddress     String?
+  city          String?
+  region        String?
+  country       String?
+  countryCode   String?
+  latitude      Float?
+  longitude     Float?
+  isp           String?
+  userAgent     String?
+  lastActivity  DateTime      @default(now())
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  messages      ChatMessage[]
+}
+
+model ChatMessage {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  sessionId     String      @db.ObjectId
+  session       ChatSession @relation(fields: [sessionId], references: [id])
+  sender        String      // customer | bot | agent
+  senderName    String?
+  content       String
+  messageType   String      @default("text") // text | suggestion | system | typing
+  suggestions   String?     // JSON array of suggestion strings
+  createdAt     DateTime    @default(now())
+}
+
+model LoginAttempt {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String
+  ipAddress    String
+  location     String?
+  isSuspicious Boolean  @default(false)
+  timestamp    DateTime @default(now())
+}
+
+model SystemSetting {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  key         String   @unique
+  value       String
+  updatedAt   DateTime @updatedAt
+}

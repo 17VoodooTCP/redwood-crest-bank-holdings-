@@ -1,0 +1,42 @@
+{
+  "name": "chasevault-backend",
+  "version": "1.0.0",
+  "description": "ChaseVault Banking API - inspired by COBA",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
+    "db:push": "npx prisma db push",
+    "db:seed": "node src/utils/seed.js",
+    "db:studio": "npx prisma studio",
+    "setup": "npm install && npx prisma db push && node src/utils/seed.js",
+    "test": "jest --runInBand --forceExit"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.10.2",
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.0",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.2.0",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "nodemailer": "^8.0.5",
+    "otplib": "^12.0.1",
+    "prisma": "^5.10.2",
+    "qrcode": "^1.5.3",
+    "socket.io": "^4.8.3",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "jest": "^30.3.0",
+    "nodemon": "^3.1.0"
+  }
+}

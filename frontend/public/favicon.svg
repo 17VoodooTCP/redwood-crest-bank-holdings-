@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+  <!-- Deep navy background circle -->
+  <rect width="64" height="64" rx="12" fill="#0A1E3F"/>
+  <!-- White hexagon crest icon -->
+  <path d="M32 10L52 22V42L32 54L12 42V22L32 10Z" fill="white"/>
+  <!-- Navy cutouts to form the crest/turbine pattern -->
+  <line x1="32" y1="20" x2="32" y2="50" stroke="#0A1E3F" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="32" y1="30" x2="16" y2="20" stroke="#0A1E3F" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="32" y1="30" x2="48" y2="20" stroke="#0A1E3F" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="32" y1="40" x2="16" y2="48" stroke="#0A1E3F" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="32" y1="40" x2="48" y2="48" stroke="#0A1E3F" stroke-width="4.5" stroke-linecap="round"/>
+</svg>
