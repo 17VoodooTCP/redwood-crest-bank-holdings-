@@ -92,7 +92,7 @@ const TopNav = () => {
                {isProfileMenuOpen && (
                  <>
                    <div className="fixed inset-0 z-40" onClick={() => setIsProfileMenuOpen(false)}></div>
-                   <div className="absolute top-full right-0 mt-6 w-[320px] bg-white rounded-md shadow-xl border border-gray-200 z-50 overflow-hidden text-gray-800">
+                   <div className="absolute top-full right-0 mt-6 w-[min(320px,calc(100vw-1rem))] bg-white rounded-md shadow-xl border border-gray-200 z-50 overflow-hidden text-gray-800">
                      <div className="px-5 py-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
                         <div>
                           <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-0.5">Signed In As</p>
