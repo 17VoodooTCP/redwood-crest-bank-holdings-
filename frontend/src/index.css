@@ -3,12 +3,17 @@
 @tailwind utilities;
 
 @layer base {
-  /* ── Prevent horizontal scroll on ALL browsers including iOS Safari ── */
+  /* ═══════════════════════════════════════════════════════════════
+     HORIZONTAL OVERFLOW / MOBILE FIX
+     Works on: iOS Safari, Chrome iOS, Brave iOS, Firefox iOS,
+               Chrome Android, Firefox Android, desktop browsers
+     ═══════════════════════════════════════════════════════════════ */
+
   html {
     @apply bg-brand-light text-brand-text antialiased font-sans m-0 p-0;
     overflow-x: hidden;
     width: 100%;
-    /* overscroll-behavior blocks elastic/rubber-band horizontal scroll */
+    /* Blocks elastic/rubber-band horizontal scroll in modern browsers */
     overscroll-behavior-x: none;
   }
 
@@ -16,9 +21,21 @@
     @apply bg-brand-light m-0 p-0;
     overflow-x: hidden;
     width: 100%;
-    /* position: relative turns body into a real containing block on iOS */
+    /*
+     * position:relative → turns body into a proper stacking/containing
+     * block so iOS treats IT (not the viewport) as the scroll container.
+     */
     position: relative;
     overscroll-behavior-x: none;
+    /*
+     * touch-action: pan-y  ← THE KEY iOS FIX
+     * Tells every iOS browser (Safari, Chrome, Brave, Firefox on iOS —
+     * they all use WebKit) that touch gestures may only pan vertically.
+     * Horizontal panning is rejected at the gesture level, BEFORE any
+     * scroll ever happens, so overflow-x:hidden doesn't even need to do
+     * its job.
+     */
+    touch-action: pan-y;
   }
 
   #root {
@@ -27,12 +44,18 @@
     position: relative;
   }
 
-  /* ── iOS Safari specific: -webkit-touch-callout guard ── */
-  @supports (-webkit-touch-callout: none) {
-    body {
-      /* Tells iOS the body is not the horizontal scroller */
-      -webkit-overflow-scrolling: auto;
-    }
+  /*
+   * Re-allow pan-x inside any element that intentionally scrolls
+   * horizontally (e.g. the transactions table).
+   */
+  .overflow-x-auto,
+  [class*="overflow-x-auto"] {
+    touch-action: pan-x pan-y;
+  }
+
+  /* Images should never overflow their container */
+  img:not([style*="maxWidth: none"]) {
+    max-width: 100%;
   }
 }
 
