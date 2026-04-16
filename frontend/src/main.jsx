@@ -15,11 +15,15 @@ import './index.css'
    We allow horizontal movement ONLY when the user's finger is over an
    element (or one of its ancestors) that is genuinely horizontally
    scrollable AND has content wider than its visible area.
+
+   Additionally, we snap horizontal scroll back to 0 whenever it drifts
+   (e.g. due to iOS rubber-band bounce or initial render quirks).
    ═══════════════════════════════════════════════════════════════════════ */
 ;(function lockHorizontalScroll() {
   let startX = 0
   let startY = 0
 
+  // ── 1. Block horizontal touch gestures ──────────────────────────────
   document.addEventListener('touchstart', function (e) {
     startX = e.touches[0].clientX
     startY = e.touches[0].clientY
@@ -51,6 +55,21 @@ import './index.css'
     // No legitimate horizontal scroll ancestor found — block the swipe.
     e.preventDefault()
   }, { passive: false })
+
+  // ── 2. Snap horizontal scroll back to 0 if it ever drifts ───────────
+  // This catches iOS rubber-band bounce or any scroll that slips through.
+  window.addEventListener('scroll', function () {
+    if (window.scrollX !== 0) {
+      window.scrollTo(0, window.scrollY)
+    }
+  }, { passive: true })
+
+  // ── 3. Ensure page starts at (0, 0) ─────────────────────────────────
+  window.addEventListener('load', function () {
+    if (window.scrollX !== 0) {
+      window.scrollTo(0, window.scrollY)
+    }
+  })
 }())
 
 ReactDOM.createRoot(document.getElementById('root')).render(

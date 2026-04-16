@@ -3,14 +3,19 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    overflow-x: clip; /* clip ≠ hidden: doesn't create a scroll container, so iOS can't route touch-scroll through it */
+    overscroll-behavior-x: none;
+  }
+
   html, body {
     @apply bg-brand-light text-brand-text antialiased font-sans m-0 p-0;
-    overscroll-behavior-x: none;
   }
 
   body {
     touch-action: pan-y;
     position: relative;
+    overscroll-behavior-x: none;
   }
 
   #root {

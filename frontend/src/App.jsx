@@ -30,6 +30,7 @@ import TopNav from './components/TopNav';
 import Footer from './components/Footer';
 import SmartAssistant from './components/SmartAssistant';
 import LiveChat from './components/LiveChat';
+import ScrollToTop from './components/ScrollToTop';
 
 const ProtectedRoute = () => {
   const { isAuthenticated, isLoading } = useAuthStore();
@@ -73,6 +74,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
