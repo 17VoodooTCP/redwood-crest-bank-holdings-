@@ -3,25 +3,17 @@
 @tailwind utilities;
 
 @layer base {
-  html {
+  html, body {
     @apply bg-brand-light text-brand-text antialiased font-sans m-0 p-0;
-    width: 100%;
-    min-width: 100vw;
     overscroll-behavior-x: none;
   }
 
   body {
-    @apply bg-brand-light m-0 p-0;
-    width: 100%;
-    min-width: 100vw;
-    overscroll-behavior-x: none;
     touch-action: pan-y;
     position: relative;
   }
 
   #root {
-    width: 100%;
-    min-width: 100vw;
     position: relative;
   }
 }
