@@ -58,10 +58,12 @@ const CreditCardVisual = ({ account }) => {
   // ABSOLUTE FIDELITY AMEX PLATINUM (IMAGE-BASED)
   if (style.isAmex) {
     return (
-      <div className="relative group overflow-hidden shadow-2xl transition-all duration-700 hover:shadow-gray-400/40 active:scale-[0.99] border border-gray-400"
-           style={{ 
-             width: '420px',
-             height: '265px',
+      <div className="relative group overflow-hidden shadow-2xl transition-all duration-700 hover:shadow-gray-400/40 active:scale-[0.99] border border-gray-400 w-full"
+           style={{
+             width: '100%',
+             maxWidth: '420px',
+             height: 'auto',
+             aspectRatio: '420 / 265',
              borderRadius: '16px',
              backgroundColor: '#1f2937', 
              backgroundImage: `url(${amexBg})`, 
@@ -99,10 +101,12 @@ const CreditCardVisual = ({ account }) => {
 
   // STANDARD RENDERING (Visa/MC/Chase)
   return (
-    <div className="relative group overflow-hidden shadow-2xl transition-all duration-500 hover:scale-[1.02] border border-black/10"
-         style={{ 
-           width: '360px',
-           height: '227px',
+    <div className="relative group overflow-hidden shadow-2xl transition-all duration-500 hover:scale-[1.02] border border-black/10 w-full"
+         style={{
+           width: '100%',
+           maxWidth: '360px',
+           height: 'auto',
+           aspectRatio: '360 / 227',
            borderRadius: '14px',
            background: style.background 
          }}>

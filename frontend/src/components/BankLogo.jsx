@@ -3,17 +3,15 @@ import React from 'react';
 const BankLogo = ({ size = 'nav' }) => {
   const isNav = size === 'nav';
 
-  // Cropping technique: the logo.png has ~60% whitespace padding.
-  // To get 48px of visible content, we render the image at ~190px and crop with overflow:hidden.
-  // The invert+screen blend removes the white background seamlessly.
   return (
     <div
       style={{
         height: isNav ? '48px' : '64px',
-        width: isNav ? '280px' : '400px',
+        width: isNav ? 'clamp(140px, 30vw, 280px)' : 'clamp(180px, 40vw, 400px)',
         overflow: 'hidden',
         display: 'flex',
         alignItems: 'center',
+        flexShrink: 0,
       }}
     >
       <img

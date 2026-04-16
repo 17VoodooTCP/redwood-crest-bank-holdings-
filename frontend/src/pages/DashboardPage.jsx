@@ -137,7 +137,7 @@ const DashboardPage = () => {
              {creditAccounts.map(acc => (
                <div key={acc.id} className="flex flex-col lg:flex-row gap-8 items-center bg-white border border-brand-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
                   {/* Realistic Physical Card Visual */}
-                  <div className="shrink-0">
+                  <div className="w-full lg:w-auto lg:shrink-0" style={{ maxWidth: '420px' }}>
                      <CreditCardVisual account={acc} />
                   </div>
                   

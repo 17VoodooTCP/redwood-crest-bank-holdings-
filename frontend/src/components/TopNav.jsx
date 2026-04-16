@@ -34,13 +34,13 @@ const TopNav = () => {
 
       {/* Main navigation bar */}
       <header className="bg-gradient-to-b from-[#0f2847] to-[#0A1E3F] text-white relative z-40" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15)' }}>
-        <div className="flex items-center justify-between px-4 md:px-8 h-[72px]">
+        <div className="flex items-center justify-between px-3 md:px-8 h-[72px] w-full min-w-0">
           
-          <div className="flex items-center h-full space-x-6">
-            <button className="sm:hidden p-1 focus:outline-none text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-              <Menu size={24} />
+          <div className="flex items-center h-full space-x-2 min-w-0 shrink-0">
+            <button className="sm:hidden p-1 focus:outline-none text-white shrink-0" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              <Menu size={22} />
             </button>
-            <NavLink to="/" className="flex items-center h-full" style={{ textDecoration: 'none' }}>
+            <NavLink to="/" className="flex items-center h-full min-w-0" style={{ textDecoration: 'none' }}>
                <BankLogo size="nav" />
             </NavLink>
           </div>
@@ -61,7 +61,7 @@ const TopNav = () => {
             ))}
           </nav>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 shrink-0">
             <div 
                className="relative hidden sm:block cursor-pointer"
                onClick={() => window.dispatchEvent(new CustomEvent('open-assistant'))}
@@ -80,8 +80,8 @@ const TopNav = () => {
             </button>
 
             <div className="relative">
-               <div 
-                 className="flex items-center space-x-2 border-l border-white/20 pl-4 cursor-pointer group"
+               <div
+                 className="flex items-center space-x-1 border-l border-white/20 pl-2 sm:pl-4 cursor-pointer group"
                  onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
                >
                  <User size={20} className="text-blue-200 group-hover:text-white transition-colors" />
