@@ -5,26 +5,27 @@
 @layer base {
   html {
     @apply bg-brand-light text-brand-text antialiased font-sans m-0 p-0;
-    overflow-x: hidden;
+    /* clip: clips visual overflow without shrinking the layout box (safe on iOS) */
+    overflow-x: clip;
     width: 100%;
     overscroll-behavior-x: none;
   }
 
   body {
     @apply bg-brand-light m-0 p-0;
-    overflow-x: hidden;
+    /* clip instead of hidden: no layout side-effects, no flex-shrink bug on iOS */
+    overflow-x: clip;
     width: 100%;
     position: relative;
     overscroll-behavior-x: none;
-    /* CSS hint — real enforcement is in main.jsx touchmove handler */
+    /* Hint to browser — real block is in main.jsx touchmove handler */
     touch-action: pan-y;
   }
 
   #root {
-    overflow-x: hidden;
+    overflow-x: clip;
     width: 100%;
     position: relative;
-    touch-action: pan-y;
   }
 }
 
