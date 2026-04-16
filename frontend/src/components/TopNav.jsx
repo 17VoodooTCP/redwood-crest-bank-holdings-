@@ -33,7 +33,7 @@ const TopNav = () => {
       </div>
 
       {/* Main navigation bar */}
-      <header className="bg-gradient-to-b from-[#0f2847] to-[#0A1E3F] text-white relative z-40 w-full" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15)', width: '100vw', maxWidth: '100%' }}>
+      <header className="bg-gradient-to-b from-[#0f2847] to-[#0A1E3F] text-white relative z-40 w-full" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15)', width: '100vw' }}>
         <div className="flex items-center justify-between px-3 md:px-8 h-[72px] w-full min-w-0">
           
           <div className="flex items-center h-full space-x-2 min-w-0 shrink-0">
