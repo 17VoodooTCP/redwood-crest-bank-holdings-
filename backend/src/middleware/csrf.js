@@ -2,17 +2,23 @@ const crypto = require('crypto');
 
 const CSRF_COOKIE = 'csrf_token';
 const CSRF_HEADER = 'x-csrf-token';
+const IS_PROD = process.env.NODE_ENV === 'production';
 
 /**
  * Generate a CSRF token and set it as a readable cookie.
  * Call this when setting auth cookies (login, register, refresh).
+ *
+ * In production the frontend and backend are on different registrable
+ * domains (Vercel vs Railway), so cookies MUST be SameSite=None + Secure
+ * or the browser will strip them on cross-site requests. In dev we use
+ * Lax so plain-http localhost works.
  */
 function setCsrfCookie(res) {
   const token = crypto.randomBytes(32).toString('hex');
   res.cookie(CSRF_COOKIE, token, {
     httpOnly: false, // JS must be able to read this to send as header
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    secure: IS_PROD,
+    sameSite: IS_PROD ? 'none' : 'lax',
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
   return token;
