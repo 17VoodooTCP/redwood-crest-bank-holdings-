@@ -75,6 +75,9 @@ const REFRESH_COOKIE_OPTS = {
 
 /**
  * Helper: set auth cookies (access + refresh + CSRF) on a response.
+ * Returns both tokens so they can be included in the JSON response body —
+ * the frontend (on a different origin) cannot read the CSRF cookie via
+ * document.cookie, so it needs the token handed to it explicitly.
  */
 function setAuthCookies(res, userId) {
   const accessToken = generateAccessToken(userId);
@@ -82,9 +85,9 @@ function setAuthCookies(res, userId) {
 
   res.cookie('accessToken', accessToken, ACCESS_COOKIE_OPTS);
   res.cookie('refreshToken', refreshToken, REFRESH_COOKIE_OPTS);
-  setCsrfCookie(res);
+  const csrfToken = setCsrfCookie(res);
 
-  return accessToken;
+  return { accessToken, csrfToken };
 }
 
 // ── Register ──────────────────────────────────────────────────────────────────
@@ -114,7 +117,7 @@ router.post('/register',
         data: { email, password: hashedPassword, firstName, lastName },
       });
 
-      const accessToken = setAuthCookies(res, user.id);
+      const { accessToken, csrfToken } = setAuthCookies(res, user.id);
 
       res.status(201).json({
         user: {
@@ -124,6 +127,7 @@ router.post('/register',
           zipCode: user.zipCode, ssnLast4: user.ssnLast4,
         },
         accessToken, // kept for backward compat during migration
+        csrfToken,   // frontend must send this back as X-CSRF-Token on state-changing requests
       });
     } catch (err) {
       console.error('[register]', err);
@@ -168,7 +172,7 @@ router.post('/login',
         }
       }
 
-      const accessToken = setAuthCookies(res, user.id);
+      const { accessToken, csrfToken } = setAuthCookies(res, user.id);
 
       // Record login attempt with geolocation (fire-and-forget)
       recordLoginAttempt(req, user.id, true);
@@ -182,6 +186,7 @@ router.post('/login',
           ssnLast4: user.ssnLast4,
         },
         accessToken, // kept for backward compat during migration
+        csrfToken,   // frontend must send this back as X-CSRF-Token on state-changing requests
       });
     } catch (err) {
       console.error('[login]', err);
@@ -202,9 +207,9 @@ router.post('/refresh', async (req, res) => {
 
     const accessToken = generateAccessToken(user.id);
     res.cookie('accessToken', accessToken, ACCESS_COOKIE_OPTS);
-    setCsrfCookie(res);
+    const csrfToken = setCsrfCookie(res);
 
-    res.json({ accessToken });
+    res.json({ accessToken, csrfToken });
   } catch {
     res.status(401).json({ error: 'Invalid or expired refresh token' });
   }
@@ -264,8 +269,11 @@ router.post('/2fa/verify', authenticate, async (req, res) => {
 });
 
 // ── Get current user ───────────────────────────────────────────────────────────
+// Also issues a fresh CSRF token so the frontend (which cannot read the CSRF
+// cookie on a different origin) can rehydrate its in-memory token on page reload.
 router.get('/me', authenticate, (req, res) => {
-  res.json({ user: req.user });
+  const csrfToken = setCsrfCookie(res);
+  res.json({ user: req.user, csrfToken });
 });
 
 module.exports = router;

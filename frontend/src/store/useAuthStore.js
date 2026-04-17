@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import api from '../services/api';
+import api, { setCsrfToken, clearCsrfToken } from '../services/api';
 
 export const useAuthStore = create((set) => ({
   user: null,
@@ -19,6 +19,9 @@ export const useAuthStore = create((set) => ({
       if (data.accessToken) {
         localStorage.setItem('token', data.accessToken);
       }
+      if (data.csrfToken) {
+        setCsrfToken(data.csrfToken);
+      }
       set({ user: data.user, isAuthenticated: true });
       return { success: true };
     } catch (error) {
@@ -35,6 +38,9 @@ export const useAuthStore = create((set) => ({
       if (data.accessToken) {
         localStorage.setItem('token', data.accessToken);
       }
+      if (data.csrfToken) {
+        setCsrfToken(data.csrfToken);
+      }
       set({ user: data.user, isAuthenticated: true });
       return { success: true };
     } catch (error) {
@@ -49,6 +55,7 @@ export const useAuthStore = create((set) => ({
       console.error('Logout error', error);
     } finally {
       localStorage.removeItem('token');
+      clearCsrfToken();
       set({ user: null, isAuthenticated: false });
     }
   },
@@ -58,6 +65,9 @@ export const useAuthStore = create((set) => ({
       const { data } = await api.post('/auth/register', { firstName, lastName, email, password });
       if (data.accessToken) {
         localStorage.setItem('token', data.accessToken);
+      }
+      if (data.csrfToken) {
+        setCsrfToken(data.csrfToken);
       }
       set({ user: data.user, isAuthenticated: true });
       return { success: true };
@@ -72,11 +82,17 @@ export const useAuthStore = create((set) => ({
 
   checkAuth: async () => {
     try {
-      // Cookie-based auth: just call /me and let the httpOnly cookie authenticate
+      // Cookie-based auth: just call /me and let the httpOnly cookie authenticate.
+      // /me also returns a fresh csrfToken so the frontend can rehydrate it after
+      // a page reload (sessionStorage may be empty on first load).
       const { data } = await api.get('/auth/me');
+      if (data.csrfToken) {
+        setCsrfToken(data.csrfToken);
+      }
       set({ user: data.user, isAuthenticated: true, isLoading: false });
     } catch {
       localStorage.removeItem('token');
+      clearCsrfToken();
       set({ user: null, isAuthenticated: false, isLoading: false });
     }
   }

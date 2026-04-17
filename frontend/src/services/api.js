@@ -7,20 +7,46 @@ const api = axios.create({
   withCredentials: true,
 });
 
-/**
- * Read the CSRF token from the csrf_token cookie.
- */
-function getCsrfToken() {
-  const match = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/);
-  return match ? decodeURIComponent(match[1]) : '';
+/* ═══════════════════════════════════════════════════════════════════════
+   CSRF TOKEN STORE
+   ───────────────────────────────────────────────────────────────────────
+   The backend sets a csrf_token cookie on its own origin. Because the
+   frontend runs on a different origin (Vercel vs Railway), document.cookie
+   on the frontend CANNOT read that cookie — browsers isolate cookies per
+   origin regardless of SameSite settings.
+
+   Instead, the backend returns the CSRF token in the JSON body of every
+   auth endpoint (login / register / refresh / me). We cache it in memory
+   plus sessionStorage (so it survives page reload within the same tab).
+   ═══════════════════════════════════════════════════════════════════════ */
+const CSRF_KEY = 'csrf_token_v1';
+
+let csrfTokenCache = (() => {
+  try {
+    return sessionStorage.getItem(CSRF_KEY) || '';
+  } catch {
+    return '';
+  }
+})();
+
+export function setCsrfToken(token) {
+  csrfTokenCache = token || '';
+  try {
+    if (token) sessionStorage.setItem(CSRF_KEY, token);
+    else sessionStorage.removeItem(CSRF_KEY);
+  } catch {
+    // sessionStorage blocked (private mode, cookies disabled) — memory cache still works
+  }
+}
+
+export function clearCsrfToken() {
+  setCsrfToken('');
 }
 
 // Attach CSRF token and (legacy) Bearer token to every request
 api.interceptors.request.use((config) => {
-  // CSRF double-submit: read cookie, send as header
-  const csrfToken = getCsrfToken();
-  if (csrfToken) {
-    config.headers['X-CSRF-Token'] = csrfToken;
+  if (csrfTokenCache) {
+    config.headers['X-CSRF-Token'] = csrfTokenCache;
   }
 
   // Legacy Bearer token support (used by admin panel)
@@ -51,10 +77,15 @@ api.interceptors.response.use(
         if (data.accessToken) {
           localStorage.setItem('token', data.accessToken);
         }
+        // Capture the new CSRF token from the refresh response
+        if (data.csrfToken) {
+          setCsrfToken(data.csrfToken);
+        }
 
         return api(originalRequest);
       } catch (refreshError) {
         localStorage.removeItem('token');
+        clearCsrfToken();
         window.location.href = '/login';
         return Promise.reject(refreshError);
       }
