@@ -8,6 +8,41 @@ const { getWelcomeMessage, getBotResponse } = require('./chatBot');
 // In-memory session tracking for speed
 const activeSessions = new Map(); // sessionId -> { socketId, userId, customerName, status, ... }
 
+// Attachment validation limits (same on customer + admin sides)
+const MAX_ATTACHMENT_BYTES = 5 * 1024 * 1024; // 5 MB raw
+const MAX_DATA_URL_CHARS = Math.ceil(MAX_ATTACHMENT_BYTES * 1.4); // base64 overhead + safety margin
+const ALLOWED_ATTACHMENT_TYPES = /^(image\/(png|jpe?g|gif|webp|heic|heif)|application\/pdf)$/i;
+
+/**
+ * Validate an attachment payload from the client.
+ * Returns { ok: true, attachment } or { ok: false, reason }.
+ */
+function validateAttachment(att) {
+  if (!att) return { ok: true, attachment: null };
+  const { url, name, type, size } = att;
+  if (typeof url !== 'string' || !url.startsWith('data:')) {
+    return { ok: false, reason: 'Invalid attachment data' };
+  }
+  if (url.length > MAX_DATA_URL_CHARS) {
+    return { ok: false, reason: 'File too large (max 5 MB)' };
+  }
+  if (typeof type !== 'string' || !ALLOWED_ATTACHMENT_TYPES.test(type)) {
+    return { ok: false, reason: 'Only images and PDFs are allowed' };
+  }
+  if (typeof size === 'number' && size > MAX_ATTACHMENT_BYTES) {
+    return { ok: false, reason: 'File too large (max 5 MB)' };
+  }
+  return {
+    ok: true,
+    attachment: {
+      attachmentUrl: url,
+      attachmentName: typeof name === 'string' ? name.slice(0, 255) : 'file',
+      attachmentType: type,
+      attachmentSize: typeof size === 'number' ? size : null,
+    }
+  };
+}
+
 function initChatSocket(httpServer) {
   const io = new Server(httpServer, {
     cors: {
@@ -15,7 +50,9 @@ function initChatSocket(httpServer) {
       credentials: true
     },
     pingInterval: 10000,
-    pingTimeout: 5000
+    pingTimeout: 5000,
+    // Raise default 1MB payload so base64-encoded 5MB file attachments (~7MB) fit.
+    maxHttpBufferSize: 8 * 1024 * 1024
   });
 
   const customerNs = io.of('/chat');
@@ -117,11 +154,22 @@ function initChatSocket(httpServer) {
     // Customer sends a message
     socket.on('chat:message', async (data) => {
       try {
-        const { sessionId, content } = data;
-        if (!sessionId || !content) return;
+        const { sessionId, content, attachment } = data;
+        if (!sessionId) return;
 
         const sessionData = activeSessions.get(sessionId);
         if (!sessionData) return;
+
+        // Validate attachment (if provided)
+        const attResult = validateAttachment(attachment);
+        if (!attResult.ok) {
+          socket.emit('chat:error', { message: attResult.reason });
+          return;
+        }
+
+        // Must have either content or an attachment
+        const hasText = typeof content === 'string' && content.trim().length > 0;
+        if (!hasText && !attResult.attachment) return;
 
         // Update last activity
         sessionData.lastActivity = new Date();
@@ -131,13 +179,15 @@ function initChatSocket(httpServer) {
         });
 
         // Save customer message
+        const messageType = attResult.attachment ? 'file' : 'text';
         const custMsg = await prisma.chatMessage.create({
           data: {
             sessionId,
             sender: 'customer',
             senderName: sessionData.customerName,
-            content,
-            messageType: 'text'
+            content: hasText ? content : '',
+            messageType,
+            ...(attResult.attachment || {})
           }
         });
 
@@ -145,17 +195,21 @@ function initChatSocket(httpServer) {
           id: custMsg.id,
           sender: 'customer',
           senderName: sessionData.customerName,
-          content,
-          messageType: 'text',
+          content: custMsg.content,
+          messageType,
+          attachmentUrl: custMsg.attachmentUrl,
+          attachmentName: custMsg.attachmentName,
+          attachmentType: custMsg.attachmentType,
+          attachmentSize: custMsg.attachmentSize,
           createdAt: custMsg.createdAt
         };
 
-        // Notify admin
+        // Notify admin (customer shows their own optimistic copy locally)
         adminNs.to(sessionId).emit('chat:message', msgPayload);
         adminNs.emit('chat:activity', { sessionId, lastActivity: new Date() });
 
-        // If still in bot mode, generate bot response
-        if (sessionData.status === 'bot') {
+        // Bot only reacts to text messages, not file-only sends
+        if (sessionData.status === 'bot' && hasText) {
           const botReply = getBotResponse(content);
 
           // Small delay for natural feel
@@ -311,6 +365,10 @@ function initChatSocket(httpServer) {
             content: m.content,
             messageType: m.messageType,
             suggestions: m.suggestions ? JSON.parse(m.suggestions) : [],
+            attachmentUrl: m.attachmentUrl,
+            attachmentName: m.attachmentName,
+            attachmentType: m.attachmentType,
+            attachmentSize: m.attachmentSize,
             createdAt: m.createdAt
           }))
         });
@@ -371,17 +429,29 @@ function initChatSocket(httpServer) {
 
     // Admin sends a message
     socket.on('chat:message', async (data) => {
-      const { sessionId, content, agentName } = data;
-      if (!sessionId || !content) return;
+      const { sessionId, content, agentName, attachment } = data;
+      if (!sessionId) return;
+
+      // Validate attachment (if provided)
+      const attResult = validateAttachment(attachment);
+      if (!attResult.ok) {
+        socket.emit('chat:error', { message: attResult.reason });
+        return;
+      }
+
+      const hasText = typeof content === 'string' && content.trim().length > 0;
+      if (!hasText && !attResult.attachment) return;
 
       try {
+        const messageType = attResult.attachment ? 'file' : 'text';
         const agentMsg = await prisma.chatMessage.create({
           data: {
             sessionId,
             sender: 'agent',
             senderName: agentName || 'Agent',
-            content,
-            messageType: 'text'
+            content: hasText ? content : '',
+            messageType,
+            ...(attResult.attachment || {})
           }
         });
 
@@ -394,9 +464,13 @@ function initChatSocket(httpServer) {
           id: agentMsg.id,
           sender: 'agent',
           senderName: agentName || 'Agent',
-          content,
-          messageType: 'text',
+          content: agentMsg.content,
+          messageType,
           suggestions: [],
+          attachmentUrl: agentMsg.attachmentUrl,
+          attachmentName: agentMsg.attachmentName,
+          attachmentType: agentMsg.attachmentType,
+          attachmentSize: agentMsg.attachmentSize,
           createdAt: agentMsg.createdAt
         };
 

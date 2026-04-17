@@ -3,10 +3,29 @@ import { io } from 'socket.io-client';
 import {
   MessageCircle, Send, Users, MapPin, Globe, Wifi, WifiOff,
   Bot, Headphones, Clock, ChevronRight, Phone, X, User,
-  ArrowRightLeft, Loader2, Monitor
+  ArrowRightLeft, Loader2, Monitor, Paperclip, FileText, Download
 } from 'lucide-react';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
+const MAX_FILE_BYTES = 5 * 1024 * 1024; // 5 MB
+const ALLOWED_MIME = /^(image\/(png|jpe?g|gif|webp|heic|heif)|application\/pdf)$/i;
+
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error || new Error('Read failed'));
+    reader.readAsDataURL(file);
+  });
+}
+
+function formatBytes(n) {
+  if (!n) return '';
+  if (n < 1024) return `${n} B`;
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+  return `${(n / (1024 * 1024)).toFixed(1)} MB`;
+}
 
 export default function AdminLiveChat() {
   const [socket, setSocket] = useState(null);
@@ -16,9 +35,12 @@ export default function AdminLiveChat() {
   const [input, setInput] = useState('');
   const [connected, setConnected] = useState(false);
   const [customerTyping, setCustomerTyping] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const typingTimeoutRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -93,6 +115,11 @@ export default function AdminLiveChat() {
       if (sender === 'customer') setCustomerTyping(false);
     });
 
+    s.on('chat:error', ({ message }) => {
+      setUploadError(message || 'Something went wrong');
+      setIsUploading(false);
+    });
+
     s.on('disconnect', () => setConnected(false));
 
     setSocket(s);
@@ -155,6 +182,54 @@ export default function AdminLiveChat() {
 
     setInput('');
     inputRef.current?.focus();
+  };
+
+  const handleFilePick = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+
+    setUploadError('');
+
+    if (!activeSession || activeSession.status !== 'active') {
+      setUploadError('Take over the chat before sending files');
+      return;
+    }
+    if (!ALLOWED_MIME.test(file.type)) {
+      setUploadError('Only images and PDF files are allowed');
+      return;
+    }
+    if (file.size > MAX_FILE_BYTES) {
+      setUploadError(`File too large (max ${formatBytes(MAX_FILE_BYTES)})`);
+      return;
+    }
+    if (!socket) {
+      setUploadError('Not connected, try again in a moment');
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      const dataUrl = await readFileAsDataUrl(file);
+
+      const attachment = {
+        url: dataUrl,
+        name: file.name,
+        type: file.type,
+        size: file.size,
+      };
+
+      socket.emit('chat:message', {
+        sessionId: activeSession.id,
+        content: '',
+        agentName: 'Admin',
+        attachment,
+      });
+    } catch (err) {
+      setUploadError('Could not read that file');
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const closeSession = () => {
@@ -412,7 +487,38 @@ export default function AdminLiveChat() {
                   Click "Take Over" to start chatting with this customer
                 </div>
               )}
+              {uploadError && (
+                <div className="mb-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-1.5 flex items-start justify-between gap-2">
+                  <span>{uploadError}</span>
+                  <button
+                    onClick={() => setUploadError('')}
+                    className="text-red-400 hover:text-red-600 shrink-0"
+                    aria-label="Dismiss"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              )}
               <div className="flex items-center gap-2">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/png,image/jpeg,image/gif,image/webp,image/heic,image/heif,application/pdf"
+                  className="hidden"
+                  onChange={handleFilePick}
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={activeSession.status !== 'active' || isUploading}
+                  title="Attach image or PDF"
+                  className="text-gray-500 hover:text-blue-600 hover:bg-blue-50 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg w-9 h-9 flex items-center justify-center transition-colors shrink-0"
+                >
+                  {isUploading
+                    ? <Loader2 className="w-4 h-4 animate-spin" />
+                    : <Paperclip className="w-4 h-4" />
+                  }
+                </button>
                 <input
                   ref={inputRef}
                   value={input}
@@ -477,15 +583,23 @@ function AdminChatBubble({ msg }) {
             {new Date(msg.createdAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
           </span>
         </div>
-        <div className={`px-3 py-2 rounded-xl text-sm ${
-          isCustomer
-            ? 'bg-white border border-gray-200 text-gray-800'
-            : isBot
-              ? 'bg-blue-50 border border-blue-200 text-blue-900'
-              : 'bg-green-50 border border-green-200 text-green-900'
-        }`}>
-          {msg.content}
-        </div>
+        {msg.attachmentUrl && (
+          <AdminAttachment msg={msg} />
+        )}
+
+        {msg.content && (
+          <div className={`px-3 py-2 rounded-xl text-sm ${
+            msg.attachmentUrl ? 'mt-1' : ''
+          } ${
+            isCustomer
+              ? 'bg-white border border-gray-200 text-gray-800'
+              : isBot
+                ? 'bg-blue-50 border border-blue-200 text-blue-900'
+                : 'bg-green-50 border border-green-200 text-green-900'
+          }`}>
+            {msg.content}
+          </div>
+        )}
 
         {msg.messageType === 'suggestion' && msg.suggestions?.length > 0 && (
           <div className="flex flex-wrap gap-1 mt-1.5">
@@ -498,5 +612,46 @@ function AdminChatBubble({ msg }) {
         )}
       </div>
     </div>
+  );
+}
+
+function AdminAttachment({ msg }) {
+  const { attachmentUrl, attachmentName, attachmentType, attachmentSize } = msg;
+  const isImage = attachmentType?.startsWith('image/');
+
+  if (isImage) {
+    return (
+      <a
+        href={attachmentUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block rounded-xl overflow-hidden border border-gray-200 bg-white max-w-[240px] hover:opacity-95 transition-opacity"
+      >
+        <img
+          src={attachmentUrl}
+          alt={attachmentName || 'attachment'}
+          className="block w-full h-auto max-h-[240px] object-cover"
+        />
+      </a>
+    );
+  }
+
+  return (
+    <a
+      href={attachmentUrl}
+      download={attachmentName || 'file.pdf'}
+      className="flex items-center gap-2.5 max-w-[260px] px-3 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-800 hover:bg-gray-50 transition-colors"
+    >
+      <div className="w-9 h-9 rounded-lg bg-red-50 text-red-600 flex items-center justify-center shrink-0">
+        <FileText className="w-4 h-4" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="text-xs font-medium truncate">{attachmentName || 'document.pdf'}</div>
+        <div className="text-[10px] text-gray-500">
+          PDF{attachmentSize ? ` · ${formatBytes(attachmentSize)}` : ''}
+        </div>
+      </div>
+      <Download className="w-4 h-4 shrink-0 text-gray-500" />
+    </a>
   );
 }
