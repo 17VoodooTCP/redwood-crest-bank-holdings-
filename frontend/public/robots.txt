@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# This is a demo banking portfolio project
+# No real financial transactions or sensitive data

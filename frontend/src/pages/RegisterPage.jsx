@@ -89,7 +89,7 @@ const RegisterPage = () => {
   };
 
   const inputClass = (field) =>
-    `w-full border ${fieldErrors[field] ? 'border-red-400 ring-1 ring-red-400' : 'border-gray-300'} rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#0060f0] focus:ring-1 focus:ring-[#0060f0] transition-colors`;
+    `w-full border ${fieldErrors[field] ? 'border-red-400 ring-1 ring-red-400' : 'border-gray-300'} rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#0A1E3F] focus:ring-1 focus:ring-[#0A1E3F] transition-colors`;
 
   return (
     <div className="min-h-screen bg-[#f7f7f7] flex flex-col">
@@ -105,7 +105,7 @@ const RegisterPage = () => {
             <Shield size={14} className="text-green-600" />
             <span className="hidden sm:inline">Secure & encrypted</span>
             <span className="text-gray-300">|</span>
-            <Link to="/login" className="text-[#0060f0] font-medium hover:underline">Sign in</Link>
+            <Link to="/login" className="text-[#0A1E3F] font-medium hover:underline">Sign in</Link>
           </div>
         </div>
       </div>
@@ -125,11 +125,11 @@ const RegisterPage = () => {
               <div key={i} className="flex items-center">
                 <div className="flex items-center gap-2">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
-                    i < step ? 'bg-green-500 text-white' : i === step ? 'bg-[#0060f0] text-white' : 'bg-gray-200 text-gray-500'
+                    i < step ? 'bg-green-500 text-white' : i === step ? 'bg-[#0A1E3F] text-white' : 'bg-gray-200 text-gray-500'
                   }`}>
                     {i < step ? <Check size={14} /> : i + 1}
                   </div>
-                  <span className={`text-xs font-medium hidden sm:inline ${i === step ? 'text-[#0060f0]' : 'text-gray-400'}`}>{label}</span>
+                  <span className={`text-xs font-medium hidden sm:inline ${i === step ? 'text-[#0A1E3F]' : 'text-gray-400'}`}>{label}</span>
                 </div>
                 {i < steps.length - 1 && <div className={`w-8 sm:w-16 h-[2px] mx-2 ${i < step ? 'bg-green-500' : 'bg-gray-200'}`} />}
               </div>
@@ -316,10 +316,10 @@ const RegisterPage = () => {
                       type="checkbox"
                       checked={form.agreeTerms}
                       onChange={e => set('agreeTerms', e.target.checked)}
-                      className="mt-0.5 rounded border-gray-300 text-[#0060f0] focus:ring-[#0060f0]"
+                      className="mt-0.5 rounded border-gray-300 text-[#0A1E3F] focus:ring-[#0A1E3F]"
                     />
                     <span className="text-xs text-gray-600 leading-relaxed">
-                      I agree to the Redwood Crest <Link to="/terms" className="text-[#0060f0] underline">Terms of Use</Link>, <Link to="/privacy" className="text-[#0060f0] underline">Privacy Policy</Link>, and <Link to="/terms" className="text-[#0060f0] underline">Electronic Communications Agreement</Link>. I understand that Redwood Crest Bank, N.A. will use the information I provide to open and manage my account.
+                      I agree to the Redwood Crest <Link to="/terms" className="text-[#0A1E3F] underline">Terms of Use</Link>, <Link to="/privacy" className="text-[#0A1E3F] underline">Privacy Policy</Link>, and <Link to="/terms" className="text-[#0A1E3F] underline">Electronic Communications Agreement</Link>. I understand that Redwood Crest Bank, N.A. will use the information I provide to open and manage my account.
                     </span>
                   </label>
                 </div>
@@ -338,11 +338,11 @@ const RegisterPage = () => {
             {/* Navigation buttons */}
             <div className="flex items-center justify-between mt-8 pt-5 border-t border-gray-100">
               {step > 0 ? (
-                <button onClick={() => setStep(step - 1)} className="flex items-center gap-1 text-sm text-[#0060f0] hover:underline font-medium">
+                <button onClick={() => setStep(step - 1)} className="flex items-center gap-1 text-sm text-[#0A1E3F] hover:underline font-medium">
                   <ArrowLeft size={16} /> Back
                 </button>
               ) : (
-                <Link to="/login" className="flex items-center gap-1 text-sm text-[#0060f0] hover:underline font-medium">
+                <Link to="/login" className="flex items-center gap-1 text-sm text-[#0A1E3F] hover:underline font-medium">
                   <ArrowLeft size={16} /> Sign in instead
                 </Link>
               )}
@@ -350,7 +350,7 @@ const RegisterPage = () => {
               {step < 2 ? (
                 <button
                   onClick={handleNext}
-                  className="bg-[#0060f0] hover:bg-[#004bb5] text-white font-semibold text-sm px-8 py-3 rounded-lg flex items-center gap-2 transition-colors"
+                  className="bg-[#0A1E3F] hover:bg-[#06132A] text-white font-semibold text-sm px-8 py-3 rounded-lg flex items-center gap-2 transition-colors"
                 >
                   Continue <ChevronRight size={16} />
                 </button>
@@ -358,7 +358,7 @@ const RegisterPage = () => {
                 <button
                   onClick={handleSubmit}
                   disabled={isLoading}
-                  className="bg-[#0060f0] hover:bg-[#004bb5] text-white font-semibold text-sm px-8 py-3 rounded-lg transition-colors disabled:opacity-60"
+                  className="bg-[#0A1E3F] hover:bg-[#06132A] text-white font-semibold text-sm px-8 py-3 rounded-lg transition-colors disabled:opacity-60"
                 >
                   {isLoading ? 'Creating account...' : 'Open your account'}
                 </button>
@@ -368,7 +368,7 @@ const RegisterPage = () => {
 
           {/* Bottom help */}
           <div className="text-center mt-6 text-xs text-gray-500">
-            <p>Need help? Call <strong className="text-gray-700">+1(603)661-9146</strong> or visit a <Link to="/atm-locator" className="text-[#0060f0] underline">nearby branch</Link>.</p>
+            <p>Need help? Call <strong className="text-gray-700">+1(603)661-9146</strong> or visit a <Link to="/atm-locator" className="text-[#0A1E3F] underline">nearby branch</Link>.</p>
           </div>
         </div>
       </div>
@@ -376,10 +376,10 @@ const RegisterPage = () => {
       {/* Bottom bar */}
       <div className="bg-white border-t border-gray-200 py-4">
         <div className="max-w-[1200px] mx-auto px-4 flex flex-wrap justify-center gap-x-5 gap-y-2 text-[11px] text-gray-400">
-          <Link to="/privacy" className="hover:text-[#0060f0]">Privacy</Link>
-          <Link to="/security-center" className="hover:text-[#0060f0]">Security</Link>
-          <Link to="/terms" className="hover:text-[#0060f0]">Terms of Use</Link>
-          <Link to="/accessibility" className="hover:text-[#0060f0]">Accessibility</Link>
+          <Link to="/privacy" className="hover:text-[#0A1E3F]">Privacy</Link>
+          <Link to="/security-center" className="hover:text-[#0A1E3F]">Security</Link>
+          <Link to="/terms" className="hover:text-[#0A1E3F]">Terms of Use</Link>
+          <Link to="/accessibility" className="hover:text-[#0A1E3F]">Accessibility</Link>
           <span>© {new Date().getFullYear()} Redwood Crest Bank, N.A. Member FDIC</span>
         </div>
       </div>

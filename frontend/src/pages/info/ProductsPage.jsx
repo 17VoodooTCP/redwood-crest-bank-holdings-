@@ -8,7 +8,7 @@ const products = {
     subtitle: 'Everyday banking made simple. Choose the checking account that fits your lifestyle.',
     items: [
       {
-        name: 'Total Checking',
+        name: 'Premier Checking',
         icon: Wallet,
         fee: '$12/mo',
         feeWaiver: 'Waived with $1,500 min balance or $500 direct deposit',
@@ -65,7 +65,7 @@ const products = {
     subtitle: 'Earn rewards on every purchase with no annual fee options and premium travel benefits.',
     items: [
       {
-        name: 'Sapphire Preferred Card',
+        name: 'Redwood Preferred Card',
         icon: CreditCard,
         fee: '$95/year',
         feeWaiver: 'Annual fee',
@@ -74,7 +74,7 @@ const products = {
         highlight: true
       },
       {
-        name: 'Freedom Unlimited',
+        name: 'Redwood Unlimited',
         icon: Zap,
         fee: '$0/year',
         feeWaiver: 'No annual fee',

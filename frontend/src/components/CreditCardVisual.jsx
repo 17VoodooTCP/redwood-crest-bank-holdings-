@@ -28,14 +28,14 @@ const CreditCardVisual = ({ account }) => {
         isBlack: true
       };
     }
-    if (name.includes('SAPPHIRE RESERVE') || name.includes('SAPPHIRE')) {
+    if (name.includes('REDWOOD PREFERRED') || name.includes('REDWOOD_PREFERRED')) {
       return {
         background: 'linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #1e3a8a 100%)',
         textColor: '#ffffff',
         secondaryColor: '#93c5fd',
-        type: 'SAPPHIRE_RESERVE',
-        brandName: 'CHASE SAPPHIRE',
-        isSapphire: true
+        type: 'REDWOOD_PREFERRED_RESERVE',
+        brandName: 'REDWOOD PREFERRED',
+        isPremium: true
       };
     }
     return {
@@ -99,7 +99,7 @@ const CreditCardVisual = ({ account }) => {
     );
   }
 
-  // STANDARD RENDERING (Visa/MC/Chase)
+  // STANDARD RENDERING (Visa/MC)
   return (
     <div className="relative group overflow-hidden shadow-2xl transition-all duration-500 hover:scale-[1.02] border border-black/10 w-full"
          style={{

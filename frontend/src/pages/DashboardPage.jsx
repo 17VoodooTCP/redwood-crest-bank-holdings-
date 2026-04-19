@@ -141,7 +141,7 @@ const DashboardPage = () => {
                      <CreditCardVisual account={acc} />
                   </div>
                   
-                  {/* Account Info Details (Chase Style) */}
+                  {/* Account Info Details */}
                   <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                      <div className="flex flex-col justify-center">
                         <h3 className="text-lg font-medium text-brand-blue mb-2">{acc.name}</h3>

@@ -244,7 +244,7 @@ export default function LiveChat() {
     return (
       <button
         onClick={openChat}
-        className="fixed bottom-6 right-6 z-50 bg-[#0060f0] hover:bg-[#004bb5] text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110"
+        className="fixed bottom-6 right-6 z-50 bg-[#0A1E3F] hover:bg-[#06132A] text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110"
         title="Chat with us"
       >
         <MessageCircle className="w-6 h-6" />
@@ -262,7 +262,7 @@ export default function LiveChat() {
     return (
       <div
         onClick={() => { setIsMinimized(false); setUnread(0); }}
-        className="fixed bottom-6 right-6 z-50 bg-[#0060f0] text-white rounded-full px-5 py-3 flex items-center gap-2 shadow-lg cursor-pointer hover:bg-[#004bb5] transition-all"
+        className="fixed bottom-6 right-6 z-50 bg-[#0A1E3F] text-white rounded-full px-5 py-3 flex items-center gap-2 shadow-lg cursor-pointer hover:bg-[#06132A] transition-all"
       >
         <MessageCircle className="w-5 h-5" />
         <span className="text-sm font-medium">Chat with us</span>
@@ -281,7 +281,7 @@ export default function LiveChat() {
       style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
 
       {/* Header */}
-      <div className="bg-[#0060f0] text-white px-4 py-3 flex items-center justify-between shrink-0">
+      <div className="bg-[#0A1E3F] text-white px-4 py-3 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center">
             {status === 'active' ? <Headphones className="w-5 h-5" /> : <Bot className="w-5 h-5" />}
@@ -352,7 +352,7 @@ export default function LiveChat() {
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading || status === 'closed' || !sessionId}
               title="Attach image or PDF"
-              className="text-gray-500 hover:text-[#0060f0] hover:bg-blue-50 disabled:opacity-40 disabled:cursor-not-allowed rounded-full w-9 h-9 flex items-center justify-center transition-colors shrink-0"
+              className="text-gray-500 hover:text-[#0A1E3F] hover:bg-blue-50 disabled:opacity-40 disabled:cursor-not-allowed rounded-full w-9 h-9 flex items-center justify-center transition-colors shrink-0"
             >
               {isUploading
                 ? <Loader2 className="w-4 h-4 animate-spin" />
@@ -371,7 +371,7 @@ export default function LiveChat() {
             <button
               onClick={() => sendMessage()}
               disabled={!input.trim() || status === 'closed'}
-              className="bg-[#0060f0] hover:bg-[#004bb5] disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-full w-9 h-9 flex items-center justify-center transition-colors shrink-0"
+              className="bg-[#0A1E3F] hover:bg-[#06132A] disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-full w-9 h-9 flex items-center justify-center transition-colors shrink-0"
             >
               <Send className="w-4 h-4" />
             </button>
@@ -385,7 +385,7 @@ export default function LiveChat() {
           <p className="text-xs text-gray-500 mb-2">This chat session has ended.</p>
           <button
             onClick={() => { closeChat(); setTimeout(openChat, 100); }}
-            className="text-xs text-[#0060f0] hover:underline font-medium"
+            className="text-xs text-[#0A1E3F] hover:underline font-medium"
           >
             Start a new chat
           </button>
@@ -434,7 +434,7 @@ function ChatBubble({ msg, onSuggestionClick }) {
             msg.attachmentUrl ? 'mt-1' : ''
           } ${
             isCustomer
-              ? 'bg-[#0060f0] text-white rounded-br-md'
+              ? 'bg-[#0A1E3F] text-white rounded-br-md'
               : 'bg-white text-gray-800 border border-gray-200 rounded-bl-md shadow-sm'
           }`}>
             {msg.content}

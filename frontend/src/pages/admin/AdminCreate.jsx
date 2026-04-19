@@ -196,7 +196,7 @@ const AdminCreate = ({ users, onDataChange }) => {
                     <option value="">Select brand...</option>
                     <option value="AMEX_PLATINUM">American Express Platinum</option>
                     <option value="BLACK_CARD">Centurion Black Card</option>
-                    <option value="SAPPHIRE_RESERVE">Sapphire Reserve</option>
+                    <option value="REDWOOD_PREFERRED">Redwood Preferred</option>
                   </select>
                 </div>
               )}
@@ -274,7 +274,7 @@ const AdminCreate = ({ users, onDataChange }) => {
                   <option value="">Select brand...</option>
                   <option value="AMEX_PLATINUM">American Express Platinum</option>
                   <option value="BLACK_CARD">Centurion Black Card</option>
-                  <option value="SAPPHIRE_RESERVE">Sapphire Reserve</option>
+                  <option value="REDWOOD_PREFERRED">Redwood Preferred</option>
                 </select>
               </div>
             )}
