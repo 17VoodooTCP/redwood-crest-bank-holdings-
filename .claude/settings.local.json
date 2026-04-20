@@ -40,7 +40,27 @@
       "Bash(railway --version)",
       "Bash(npx vercel:*)",
       "Bash(gh auth:*)",
-      "Bash(git config:*)"
+      "Bash(git config:*)",
+      "Bash(vercel whoami:*)",
+      "Bash(vercel --yes --prod)",
+      "Bash(railway login:*)",
+      "Bash(vercel alias:*)",
+      "Bash(vercel domains:*)",
+      "Bash(vercel env:*)",
+      "Bash(vercel ls:*)",
+      "Bash(curl -s https://redwood-crest-bank-holdings-production.up.railway.app/auth/me)",
+      "Bash(curl -s -X POST http://localhost:3001/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"Admin@redwoodcrest.com\",\"password\":\"Kenrioty1700#\"}')",
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(curl -s -X POST https://redwood-crest-bank-holdings-production.up.railway.app/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"Admin@redwoodcrest.com\",\"password\":\"Kenrioty1700#\"}')",
+      "Bash(curl -s -X POST https://redwood-crest-bank-holdings-production.up.railway.app/admin/verify -H \"Content-Type: application/json\" -d '{\"email\":\"Admin@redwoodcrest.com\",\"password\":\"Kenrioty1700#\"}')",
+      "Bash(curl -s -X POST https://redwood-crest-bank-holdings-production.up.railway.app/admin/login -H \"Content-Type: application/json\" -d '{\"email\":\"Admin@redwoodcrest.com\",\"password\":\"Kenrioty1700#\"}')",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "Bash(ls frontend/vercel.json frontend/next.config.* frontend/_redirects)",
+      "Bash(cat frontend/vercel.json)",
+      "Bash(xargs grep *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }

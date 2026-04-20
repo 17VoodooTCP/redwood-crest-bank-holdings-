@@ -20,7 +20,7 @@ async function seed() {
   const hashedPassword = await bcrypt.hash('Demo1234!', 12);
   const user = await prisma.user.create({
     data: {
-      email: 'demo@redwoodcrestbank.com',
+      email: 'demo@redwoodcresthq.com',
       password: hashedPassword,
       firstName: 'Alex',
       lastName: 'Johnson',
@@ -68,7 +68,7 @@ async function seed() {
     data: {
       userId: user.id,
       type: 'CREDIT',
-      name: 'SAPPHIRE PREFERRED CARD',
+      name: 'REDWOOD PREFERRED CARD',
       accountNumber: '9012',
       balance: -1847.23,
       availableBalance: 8152.77,
@@ -172,7 +172,7 @@ async function seed() {
 
   console.log('\n🎉 Seed complete!\n');
   console.log('   Demo credentials:');
-  console.log('   Email:    demo@redwoodcrestbank.com');
+  console.log('   Email:    demo@redwoodcresthq.com');
   console.log('   Password: Demo1234!\n');
 
   await prisma.$disconnect();

@@ -1,30 +1,32 @@
 import React from 'react';
 import { useAuthStore } from '../store/useAuthStore';
 import { CreditCard, Zap, Wifi } from 'lucide-react';
-import amexBg from '../assets/amex-bg.png';
 
 const CreditCardVisual = ({ account }) => {
   const { user } = useAuthStore();
-  
+
   // Card Brand / Style identification logic
   const getCardStyle = () => {
     // CRASH-PROOF: Ensure name exists before string operations
     const name = account?.name?.toUpperCase() || '';
-    
-    if (name.includes('AMERICAN EXPRESS PLATINUM') || name.includes('AMEX')) {
+
+    if (name.includes('PLATINUM ELITE') || name.includes('PLATINUM_ELITE')) {
       return {
-        type: 'AMEX_PLATINUM',
-        brandName: 'AMERICAN EXPRESS',
-        isAmex: true
+        background: 'linear-gradient(135deg, #d1d5db 0%, #9ca3af 50%, #6b7280 100%)',
+        textColor: '#111827',
+        secondaryColor: '#374151',
+        type: 'PLATINUM_ELITE',
+        brandName: 'REDWOOD PLATINUM ELITE',
+        isPremium: true
       };
     }
-    if (name.includes('CENTURION BLACK') || name.includes('BLACK CARD')) {
+    if (name.includes('ONYX RESERVE') || name.includes('BLACK CARD') || name.includes('BLACK_CARD')) {
       return {
         background: 'linear-gradient(135deg, #18181b 0%, #09090b 50%, #27272a 100%)',
         textColor: '#f4f4f5',
         secondaryColor: '#a1a1aa',
         type: 'BLACK_CARD',
-        brandName: 'CENTURION',
+        brandName: 'REDWOOD ONYX',
         isBlack: true
       };
     }
@@ -43,61 +45,15 @@ const CreditCardVisual = ({ account }) => {
       textColor: '#ffffff',
       secondaryColor: '#e2e8f0',
       type: 'DEFAULT',
-      brandName: 'BANK CARD'
+      brandName: 'REDWOOD CREST'
     };
   };
 
   const style = getCardStyle();
   const holderName = `${user?.firstName || ''} ${user?.lastName || ''}`.trim().toUpperCase() || 'VALUED CUSTOMER';
-  
+
   // CRASH-PROOF: Ensure accountNumber exists
-  const maskedNumber = style.isAmex 
-    ? `**** ****** *${account?.accountNumber || '0000'}` 
-    : `**** **** **** ${account?.accountNumber || '0000'}`;
-
-  // ABSOLUTE FIDELITY AMEX PLATINUM (IMAGE-BASED)
-  if (style.isAmex) {
-    return (
-      <div className="relative group overflow-hidden shadow-2xl transition-all duration-700 hover:shadow-gray-400/40 active:scale-[0.99] border border-gray-400 w-full"
-           style={{
-             width: '100%',
-             maxWidth: '420px',
-             height: 'auto',
-             aspectRatio: '420 / 265',
-             borderRadius: '16px',
-             backgroundColor: '#1f2937', 
-             backgroundImage: `url(${amexBg})`, 
-             backgroundSize: '100% 100%',
-             backgroundPosition: 'center',
-             backgroundRepeat: 'no-repeat',
-             fontFamily: "'Inter', sans-serif"
-           }}>
-        
-        {/* Dynamic Data Overlays */}
-        <div className="relative h-full w-full pointer-events-none">
-          {/* Pro Metallic Patch: Perfectly covers the 'C F FROST' text area */}
-          <div className="absolute bottom-[6.5%] left-[8%] w-[280px] h-[40px] rounded-sm blur-[1px] opacity-98"
-               style={{
-                 background: 'linear-gradient(90deg, #b5b7ba 0%, #cfd1d4 50%, #b5b7ba 100%)',
-                 boxShadow: '0 0 15px 5px #c0c2c5'
-               }} />
-
-          {/* Cardmember Name - More realistic scale and spacing */}
-          <div className="absolute bottom-[8.3%] left-[10%]">
-             <p className="text-[16px] font-mono tracking-[0.1em] font-black text-black/90 transform scale-y-105 drop-shadow-sm uppercase">
-               {holderName}
-             </p>
-          </div>
-        </div>
-
-        {/* Dynamic Material Light Effect */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none" />
-        
-        {/* Material Edge Reflection */}
-        <div className="absolute inset-0 rounded-[16px] border border-white/20 pointer-events-none shadow-[inset_0_0_15px_rgba(255,255,255,0.1)]" />
-      </div>
-    );
-  }
+  const maskedNumber = `**** **** **** ${account?.accountNumber || '0000'}`;
 
   // STANDARD RENDERING (Visa/MC)
   return (

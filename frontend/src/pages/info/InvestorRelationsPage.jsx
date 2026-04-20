@@ -91,7 +91,7 @@ export default function InvestorRelationsPage() {
       <div className="bg-blue-50 rounded-xl p-6 text-center">
         <h3 className="font-semibold text-gray-900 mb-2">Shareholder Services</h3>
         <p className="text-sm text-gray-600 mb-3">For questions about your shares, dividends, or transfer agent services, please contact our shareholder services team.</p>
-        <p className="text-sm font-medium text-[#0A1E3F]">+1(603)661-9146 | support@redwoodcrestholdings.com</p>
+        <p className="text-sm font-medium text-[#0A1E3F]">+1(603)661-9146 | support@redwoodcresthq.com</p>
       </div>
     </InfoPageShell>
   );

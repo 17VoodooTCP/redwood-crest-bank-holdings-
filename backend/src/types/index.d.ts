@@ -1,5 +1,5 @@
 /**
- * Shared type definitions for the ChaseVault Banking API.
+ * Shared type definitions for the Redwood Crest Banking API.
  * These types mirror the Prisma schema and API request/response shapes.
  */
 

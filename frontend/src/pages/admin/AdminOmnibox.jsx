@@ -33,7 +33,7 @@ const AdminOmnibox = ({ onDataChange }) => {
           type="text"
           value={command}
           onChange={(e) => setCommand(e.target.value)}
-          placeholder="e.g. admin create checking account for demo@redwoodcrestholdings.com"
+          placeholder="e.g. admin create checking account for demo@redwoodcresthq.com"
           className="w-full bg-gray-50 border-2 border-gray-200 rounded-lg py-4 pl-6 pr-16 text-lg focus:outline-none focus:ring-4 focus:ring-brand-blue/10 focus:border-brand-blue transition-all"
         />
         <button

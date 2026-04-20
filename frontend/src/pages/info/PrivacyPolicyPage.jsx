@@ -52,7 +52,7 @@ We do not sell your personal information to third parties for their marketing pu
 • Opt out of certain information sharing with affiliates for marketing purposes
 • Limit sharing of personal information with non-affiliated third parties
 
-To exercise any of these rights, contact us at support@redwoodcrestholdings.com or call our Privacy Office at +1(603)661-9146.`
+To exercise any of these rights, contact us at support@redwoodcresthq.com or call our Privacy Office at +1(603)661-9146.`
   },
   {
     icon: UserX, title: 'Children\'s Privacy',
@@ -91,7 +91,7 @@ export default function PrivacyPolicyPage() {
         <div className="bg-gray-50 rounded-xl p-5 text-sm text-gray-700 space-y-1">
           <p><strong>Redwood Crest Bank Privacy Office</strong></p>
           <p>1442 Redwood Valley Road, San Francisco, CA 94105</p>
-          <p>Email: support@redwoodcrestholdings.com</p>
+          <p>Email: support@redwoodcresthq.com</p>
           <p>Phone: +1(603)661-9146</p>
         </div>
       </div>

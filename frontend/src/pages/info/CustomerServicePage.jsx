@@ -80,7 +80,7 @@ export default function CustomerServicePage() {
 
       <div className="bg-gray-50 rounded-xl p-6 text-center">
         <p className="text-sm text-gray-600">For TTY/TDD services, call <strong>+1(603)661-9146</strong></p>
-        <p className="text-xs text-gray-400 mt-2">International callers: +1(603)661-9146 | support@redwoodcrestholdings.com</p>
+        <p className="text-xs text-gray-400 mt-2">International callers: +1(603)661-9146 | support@redwoodcresthq.com</p>
       </div>
     </InfoPageShell>
   );

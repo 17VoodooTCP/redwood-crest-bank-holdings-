@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-**ChaseVault / Redwood Crest Bank** — a full-stack online banking app. Backend runs on port 3001, frontend on 5173.
+**Redwood Crest Bank** — a full-stack online banking app. Backend runs on port 3001, frontend on 5173.
 
 ## Commands
 

@@ -85,7 +85,7 @@ const StatementPage = () => {
           </div>
         </div>
 
-        {/* ACCOUNT SUMMARY BOX - CHASE STYLE */}
+        {/* ACCOUNT SUMMARY BOX */}
         <div className="mb-10">
           <h2 className="text-[13pt] font-bold font-sans border-b border-gray-300 pb-1 mb-4 uppercase tracking-tight">Account Summary</h2>
           <div className="grid grid-cols-4 gap-0 border border-gray-200">

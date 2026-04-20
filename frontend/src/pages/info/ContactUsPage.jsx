@@ -63,7 +63,7 @@ export default function ContactUsPage() {
             {[
               { icon: Phone, title: 'Phone', lines: ['General: +1(603)661-9146', 'Credit Cards: +1(603)661-9146', 'Fraud Hotline: +1(603)661-9146'] },
               { icon: MessageCircle, title: 'Live Chat', lines: ['Available through online banking', 'Mon-Fri 8 AM - 10 PM ET', 'Sat 9 AM - 5 PM ET'] },
-              { icon: Mail, title: 'Email', lines: ['support@redwoodcrestholdings.com', 'P.O. Box 15298', 'San Francisco, CA 94115-0298'] },
+              { icon: Mail, title: 'Email', lines: ['support@redwoodcresthq.com', 'P.O. Box 15298', 'San Francisco, CA 94115-0298'] },
               { icon: MapPin, title: 'Headquarters', lines: ['1442 Redwood Valley Road', 'San Francisco, CA 94105', 'United States'] },
               { icon: Globe, title: 'International', lines: ['From outside the US:', '+1(603)661-9146', 'Mon-Fri 9 AM - 6 PM ET'] },
             ].map((c, i) => (

@@ -194,8 +194,8 @@ const AdminCreate = ({ users, onDataChange }) => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Card Brand / Tier <span className="text-red-500">*</span></label>
                   <select required className="w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-brand-blue focus:ring-brand-blue bg-white" value={provisionForm.cardBrand} onChange={e => setProvisionForm({...provisionForm, cardBrand: e.target.value})}>
                     <option value="">Select brand...</option>
-                    <option value="AMEX_PLATINUM">American Express Platinum</option>
-                    <option value="BLACK_CARD">Centurion Black Card</option>
+                    <option value="PLATINUM_ELITE">Redwood Platinum Elite</option>
+                    <option value="BLACK_CARD">Redwood Onyx Reserve</option>
                     <option value="REDWOOD_PREFERRED">Redwood Preferred</option>
                   </select>
                 </div>
@@ -272,8 +272,8 @@ const AdminCreate = ({ users, onDataChange }) => {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Card Brand / Tier <span className="text-red-500">*</span></label>
                 <select required className="w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-brand-blue focus:ring-brand-blue bg-white" value={existingAccForm.cardBrand} onChange={e => setExistingAccForm({...existingAccForm, cardBrand: e.target.value})}>
                   <option value="">Select brand...</option>
-                  <option value="AMEX_PLATINUM">American Express Platinum</option>
-                  <option value="BLACK_CARD">Centurion Black Card</option>
+                  <option value="PLATINUM_ELITE">Redwood Platinum Elite</option>
+                  <option value="BLACK_CARD">Redwood Onyx Reserve</option>
                   <option value="REDWOOD_PREFERRED">Redwood Preferred</option>
                 </select>
               </div>

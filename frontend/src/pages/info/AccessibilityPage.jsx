@@ -59,7 +59,7 @@ export default function AccessibilityPage() {
         <div className="space-y-2 text-sm text-gray-700">
           <p><strong>Accessibility Hotline:</strong> +1(603)661-9146</p>
           <p><strong>TTY/TDD:</strong> +1(603)661-9146</p>
-          <p><strong>Email:</strong> support@redwoodcrestholdings.com</p>
+          <p><strong>Email:</strong> support@redwoodcresthq.com</p>
           <p><strong>Mail:</strong> Redwood Crest Bank Accessibility Office, 1442 Redwood Valley Road, San Francisco, CA 94105</p>
         </div>
       </div>

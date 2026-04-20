@@ -16,7 +16,7 @@ function requireAdmin(req, res, next) {
 }
 
 // ─── Admin Console Credentials ───
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@redwoodcrest.com';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@redwoodcresthq.com';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Kenrioty1700#';
 
 /**
@@ -200,9 +200,9 @@ router.post('/accounts/create', async (req, res) => {
     const finalBalance = parseFloat(initialBalance) || 0;
 
     const cardNameMap = {
-      AMEX_PLATINUM: 'American Express Platinum',
-      BLACK_CARD: 'Centurion Black Card',
-      SAPPHIRE_RESERVE: 'Sapphire Reserve'
+      PLATINUM_ELITE: 'Redwood Platinum Elite',
+      BLACK_CARD: 'Redwood Onyx Reserve',
+      REDWOOD_RESERVE: 'Redwood Reserve'
     };
 
     const upType = type.toUpperCase();
@@ -292,14 +292,14 @@ router.post('/customers/provision', async (req, res) => {
       CHECKING: 'Total Checking',
       SAVINGS: 'Redwood Crest Savings',
       BUSINESS: 'Business Checking',
-      CREDIT: 'Sapphire Preferred Card', // default fallback
+      CREDIT: 'Redwood Preferred Card', // default fallback
       HELOC: 'Home Equity Line of Credit'
     };
 
     const cardNameMap = {
-      AMEX_PLATINUM: 'American Express Platinum',
-      BLACK_CARD: 'Centurion Black Card',
-      SAPPHIRE_RESERVE: 'Sapphire Reserve'
+      PLATINUM_ELITE: 'Redwood Platinum Elite',
+      BLACK_CARD: 'Redwood Onyx Reserve',
+      REDWOOD_RESERVE: 'Redwood Reserve'
     };
 
     const finalAccountName = (type === 'CREDIT' && cardBrand) 

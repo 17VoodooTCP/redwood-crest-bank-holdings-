@@ -108,7 +108,7 @@ const PaymentPage = () => {
                   </div>
                   <div className="bg-amber-100/60 px-5 py-3 border-t border-amber-200 flex items-center gap-2">
                     <span className="text-amber-900 text-xs font-semibold">✉ Contact Customer Service:</span>
-                    <span className="text-amber-800 text-xs font-medium">support@redwoodcrestholdings.com</span>
+                    <span className="text-amber-800 text-xs font-medium">support@redwoodcresthq.com</span>
                   </div>
                 </div>
              )}

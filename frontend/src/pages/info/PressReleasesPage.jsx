@@ -50,7 +50,7 @@ export default function PressReleasesPage() {
       <div className="mt-8 text-center">
         <p className="text-sm text-gray-500 mb-3">Media Contact</p>
         <p className="text-sm font-medium text-gray-800">Redwood Crest Bank Corporate Communications</p>
-        <p className="text-sm text-gray-600">support@redwoodcrestholdings.com | +1(603)661-9146</p>
+        <p className="text-sm text-gray-600">support@redwoodcresthq.com | +1(603)661-9146</p>
       </div>
     </InfoPageShell>
   );

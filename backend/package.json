@@ -1,7 +1,7 @@
 {
-  "name": "chasevault-backend",
+  "name": "redwoodcrest-backend",
   "version": "1.0.0",
-  "description": "ChaseVault Banking API - inspired by COBA",
+  "description": "Redwood Crest Banking API",
   "main": "src/index.js",
   "scripts": {
     "dev": "nodemon src/index.js",

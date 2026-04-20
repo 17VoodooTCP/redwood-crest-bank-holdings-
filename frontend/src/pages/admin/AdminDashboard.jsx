@@ -140,7 +140,7 @@ const AdminDashboard = () => {
             )}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
-              <input type="email" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} placeholder="admin@redwoodcrestholdings.com" required className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0A1E3F] focus:border-transparent transition" />
+              <input type="email" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} placeholder="admin@redwoodcresthq.com" required className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0A1E3F] focus:border-transparent transition" />
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">Password</label>

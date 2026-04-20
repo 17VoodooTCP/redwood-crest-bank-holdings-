@@ -45,7 +45,7 @@ export default function TermsOfUsePage() {
       </div>
 
       <div className="mt-10 border-t border-gray-200 pt-6 text-center text-sm text-gray-500">
-        <p>If you have questions about these Terms of Use, contact us at support@redwoodcrestholdings.com</p>
+        <p>If you have questions about these Terms of Use, contact us at support@redwoodcresthq.com</p>
       </div>
     </InfoPageShell>
   );

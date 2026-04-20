@@ -36,7 +36,7 @@ async function findUserAccount(userId, searchTerm, { type, label = 'Account' } =
 function enforceHold(account, label = 'Your account') {
   if (account.isBlocked) {
     const err = new Error(
-      `${label} (...${account.accountNumber}) has been placed on hold: "${account.blockReason || 'Security review'}". Please contact customer service at support@redwoodcrestholdings.com for assistance.`
+      `${label} (...${account.accountNumber}) has been placed on hold: "${account.blockReason || 'Security review'}". Please contact customer service at support@redwoodcresthq.com for assistance.`
     );
     err.status = 403;
     err.code = 'ACCOUNT_HOLD';
