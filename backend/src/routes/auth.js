@@ -59,17 +59,19 @@ async function recordLoginAttempt(req, userId, success) {
   }
 }
 
+const IS_PROD = process.env.NODE_ENV === 'production';
+
 const ACCESS_COOKIE_OPTS = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: 'strict',
+  secure: IS_PROD,
+  sameSite: IS_PROD ? 'none' : 'strict',
   maxAge: 15 * 60 * 1000, // 15 minutes
 };
 
 const REFRESH_COOKIE_OPTS = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: 'strict',
+  secure: IS_PROD,
+  sameSite: IS_PROD ? 'none' : 'strict',
   maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
@@ -217,9 +219,14 @@ router.post('/refresh', async (req, res) => {
 
 // ── Logout ─────────────────────────────────────────────────────────────────────
 router.post('/logout', (req, res) => {
-  res.clearCookie('accessToken');
-  res.clearCookie('refreshToken');
-  res.clearCookie('csrf_token');
+  const clearOpts = {
+    httpOnly: true,
+    secure: IS_PROD,
+    sameSite: IS_PROD ? 'none' : 'strict',
+  };
+  res.clearCookie('accessToken', clearOpts);
+  res.clearCookie('refreshToken', clearOpts);
+  res.clearCookie('csrf_token', { ...clearOpts, httpOnly: false });
   res.json({ message: 'Logged out successfully' });
 });
 
