@@ -7,10 +7,12 @@ const AdminCreate = ({ users, onDataChange }) => {
   const [provisionForm, setProvisionForm] = useState({
     firstName: '', lastName: '', email: '', password: '', confirmPassword: '',
     phoneNumber: '', address: '', city: '', state: '', zipCode: '', ssnLast4: '',
-    accountType: '', initialBalance: '', cardBrand: '', depositDate: '', expiryDate: ''
+    accountType: '', initialBalance: '', cardBrand: '', cardNetwork: '',
+    creditLimit: '', depositDate: '', expiryDate: ''
   });
   const [existingAccForm, setExistingAccForm] = useState({
-    email: '', type: '', cardBrand: '', initialBalance: '', depositDate: '', expiryDate: ''
+    email: '', type: '', cardBrand: '', cardNetwork: '', creditLimit: '',
+    initialBalance: '', depositDate: '', expiryDate: ''
   });
   const [provisionSuccess, setProvisionSuccess] = useState(null);
   const [provisionLoading, setProvisionLoading] = useState(false);
@@ -36,13 +38,18 @@ const AdminCreate = ({ users, onDataChange }) => {
         payload.initialBalance = parseFloat(provisionForm.initialBalance) || 0;
         payload.depositDate = provisionForm.depositDate;
         payload.expiryDate = provisionForm.expiryDate;
+        // Send creditLimit only when explicitly set (backend falls back to default otherwise)
+        if (provisionForm.creditLimit !== '') {
+          payload.creditLimit = parseFloat(provisionForm.creditLimit);
+        }
 
         const res = await api.post('/admin/customers/provision', payload);
         setProvisionSuccess(res.data);
         setProvisionForm({
           firstName: '', lastName: '', email: '', password: '', confirmPassword: '',
           phoneNumber: '', address: '', city: '', state: '', zipCode: '', ssnLast4: '',
-          accountType: '', initialBalance: '', cardBrand: '', depositDate: '', expiryDate: ''
+          accountType: '', initialBalance: '', cardBrand: '', cardNetwork: '',
+          creditLimit: '', depositDate: '', expiryDate: ''
         });
         setGeneratedAccNumber('');
         onDataChange?.();
@@ -58,9 +65,15 @@ const AdminCreate = ({ users, onDataChange }) => {
           depositDate: existingAccForm.depositDate,
           expiryDate: existingAccForm.expiryDate
         };
+        if (existingAccForm.creditLimit !== '') {
+          payload.creditLimit = parseFloat(existingAccForm.creditLimit);
+        }
         const res = await api.post('/admin/accounts/create', payload);
         setProvisionSuccess(res.data);
-        setExistingAccForm({ email: '', type: '', cardBrand: '', initialBalance: '', depositDate: '', expiryDate: '' });
+        setExistingAccForm({
+          email: '', type: '', cardBrand: '', cardNetwork: '', creditLimit: '',
+          initialBalance: '', depositDate: '', expiryDate: ''
+        });
         onDataChange?.();
       } catch (err) {
         alert(`Error: ${err.response?.data?.error || err.message}`);
@@ -190,14 +203,34 @@ const AdminCreate = ({ users, onDataChange }) => {
               </div>
 
               {provisionForm.accountType === 'CREDIT' && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Card Brand / Tier <span className="text-red-500">*</span></label>
+                    <select required className="w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-brand-blue focus:ring-brand-blue bg-white" value={provisionForm.cardBrand} onChange={e => setProvisionForm({...provisionForm, cardBrand: e.target.value})}>
+                      <option value="">Select brand...</option>
+                      <option value="PLATINUM_ELITE">Redwood Platinum Elite</option>
+                      <option value="BLACK_CARD">Redwood Onyx Reserve</option>
+                      <option value="REDWOOD_PREFERRED">Redwood Preferred</option>
+                      <option value="AMEX_PLATINUM">American Express Platinum</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Card Network <span className="text-red-500">*</span></label>
+                    <select required className="w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-brand-blue focus:ring-brand-blue bg-white" value={provisionForm.cardNetwork} onChange={e => setProvisionForm({...provisionForm, cardNetwork: e.target.value})}>
+                      <option value="">Select network...</option>
+                      <option value="VISA">Visa</option>
+                      <option value="MASTERCARD">Mastercard</option>
+                      <option value="AMEX">American Express</option>
+                      <option value="REDWOOD">Redwood Black Card</option>
+                    </select>
+                  </div>
+                </>
+              )}
+              {(provisionForm.accountType === 'CREDIT' || provisionForm.accountType === 'HELOC') && (
                 <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Card Brand / Tier <span className="text-red-500">*</span></label>
-                  <select required className="w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-brand-blue focus:ring-brand-blue bg-white" value={provisionForm.cardBrand} onChange={e => setProvisionForm({...provisionForm, cardBrand: e.target.value})}>
-                    <option value="">Select brand...</option>
-                    <option value="PLATINUM_ELITE">Redwood Platinum Elite</option>
-                    <option value="BLACK_CARD">Redwood Onyx Reserve</option>
-                    <option value="REDWOOD_PREFERRED">Redwood Preferred</option>
-                  </select>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Credit Limit ($)</label>
+                  <input type="number" step="0.01" min="0" value={provisionForm.creditLimit} onChange={e => setProvisionForm({...provisionForm, creditLimit: e.target.value})} placeholder={provisionForm.accountType === 'HELOC' ? '50000.00' : '10000.00'} className="w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-brand-blue focus:ring-brand-blue" />
+                  <p className="text-xs text-gray-400 mt-1">Leave blank to use default ({provisionForm.accountType === 'HELOC' ? '$50,000' : '$10,000'}).</p>
                 </div>
               )}
 
@@ -268,14 +301,34 @@ const AdminCreate = ({ users, onDataChange }) => {
               </select>
             </div>
             {existingAccForm.type === 'CREDIT' && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Card Brand / Tier <span className="text-red-500">*</span></label>
+                  <select required className="w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-brand-blue focus:ring-brand-blue bg-white" value={existingAccForm.cardBrand} onChange={e => setExistingAccForm({...existingAccForm, cardBrand: e.target.value})}>
+                    <option value="">Select brand...</option>
+                    <option value="PLATINUM_ELITE">Redwood Platinum Elite</option>
+                    <option value="BLACK_CARD">Redwood Onyx Reserve</option>
+                    <option value="REDWOOD_PREFERRED">Redwood Preferred</option>
+                    <option value="AMEX_PLATINUM">American Express Platinum</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Card Network <span className="text-red-500">*</span></label>
+                  <select required className="w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-brand-blue focus:ring-brand-blue bg-white" value={existingAccForm.cardNetwork} onChange={e => setExistingAccForm({...existingAccForm, cardNetwork: e.target.value})}>
+                    <option value="">Select network...</option>
+                    <option value="VISA">Visa</option>
+                    <option value="MASTERCARD">Mastercard</option>
+                    <option value="AMEX">American Express</option>
+                    <option value="REDWOOD">Redwood Black Card</option>
+                  </select>
+                </div>
+              </div>
+            )}
+            {(existingAccForm.type === 'CREDIT' || existingAccForm.type === 'HELOC') && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Card Brand / Tier <span className="text-red-500">*</span></label>
-                <select required className="w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-brand-blue focus:ring-brand-blue bg-white" value={existingAccForm.cardBrand} onChange={e => setExistingAccForm({...existingAccForm, cardBrand: e.target.value})}>
-                  <option value="">Select brand...</option>
-                  <option value="PLATINUM_ELITE">Redwood Platinum Elite</option>
-                  <option value="BLACK_CARD">Redwood Onyx Reserve</option>
-                  <option value="REDWOOD_PREFERRED">Redwood Preferred</option>
-                </select>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Credit Limit ($)</label>
+                <input type="number" step="0.01" min="0" value={existingAccForm.creditLimit} onChange={e => setExistingAccForm({...existingAccForm, creditLimit: e.target.value})} placeholder={existingAccForm.type === 'HELOC' ? '50000.00' : '10000.00'} className="w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-brand-blue focus:ring-brand-blue" />
+                <p className="text-xs text-gray-400 mt-1">Leave blank to use default ({existingAccForm.type === 'HELOC' ? '$50,000' : '$10,000'}).</p>
               </div>
             )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-gray-200">

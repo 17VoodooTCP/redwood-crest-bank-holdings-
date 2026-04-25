@@ -1,133 +1,293 @@
 import React from 'react';
 import { useAuthStore } from '../store/useAuthStore';
-import { CreditCard, Zap, Wifi } from 'lucide-react';
+import { Wifi } from 'lucide-react';
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   Card tier styles — background, foreground, brand label.
+   ─────────────────────────────────────────────────────────────────────────── */
+const TIER_STYLES = {
+  PLATINUM_ELITE: {
+    background: 'linear-gradient(135deg, #d1d5db 0%, #9ca3af 50%, #6b7280 100%)',
+    textColor: '#111827',
+    secondaryColor: '#374151',
+    brandName: 'REDWOOD PLATINUM ELITE',
+    logoFilter: 'grayscale(1) brightness(0.3)',
+  },
+  BLACK_CARD: {
+    background: 'linear-gradient(135deg, #18181b 0%, #09090b 50%, #27272a 100%)',
+    textColor: '#f4f4f5',
+    secondaryColor: '#a1a1aa',
+    brandName: 'REDWOOD ONYX',
+    logoFilter: 'invert(1) grayscale(1) brightness(2)',
+  },
+  REDWOOD_PREFERRED: {
+    background: 'linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #1e3a8a 100%)',
+    textColor: '#ffffff',
+    secondaryColor: '#93c5fd',
+    brandName: 'REDWOOD PREFERRED',
+    logoFilter: 'invert(1) grayscale(1) brightness(2)',
+  },
+  AMEX_PLATINUM: {
+    background: 'linear-gradient(135deg, #e5e7eb 0%, #cbd5e1 45%, #94a3b8 100%)',
+    textColor: '#0f172a',
+    secondaryColor: '#475569',
+    brandName: 'AMERICAN EXPRESS PLATINUM',
+    logoFilter: 'grayscale(1) brightness(0.3)',
+  },
+  DEFAULT: {
+    background: 'linear-gradient(135deg, #0A1E3F 0%, #06132A 100%)',
+    textColor: '#ffffff',
+    secondaryColor: '#cbd5e1',
+    brandName: 'REDWOOD CREST',
+    logoFilter: 'invert(1) grayscale(1) brightness(2)',
+  },
+};
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Network logos — minimal SVG/CSS marks (not pixel-exact brand assets)
+   ─────────────────────────────────────────────────────────────────────────── */
+const VisaLogo = () => (
+  <div style={{
+    background: '#1A1F71',
+    padding: '4px 10px',
+    borderRadius: '4px',
+    boxShadow: '0 1px 2px rgba(0,0,0,0.2)',
+  }}>
+    <span style={{
+      color: '#F7B600',
+      fontFamily: 'Georgia, serif',
+      fontStyle: 'italic',
+      fontWeight: 900,
+      fontSize: '14px',
+      letterSpacing: '0.5px',
+      lineHeight: 1,
+    }}>VISA</span>
+  </div>
+);
+
+const MasterCardLogo = () => (
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div style={{
+      width: '22px', height: '22px',
+      background: '#EB001B', borderRadius: '50%',
+      boxShadow: '0 1px 2px rgba(0,0,0,0.25)',
+    }} />
+    <div style={{
+      width: '22px', height: '22px',
+      background: '#F79E1B', borderRadius: '50%',
+      marginLeft: '-10px',
+      mixBlendMode: 'multiply',
+      boxShadow: '0 1px 2px rgba(0,0,0,0.25)',
+    }} />
+  </div>
+);
+
+const AmexLogo = () => (
+  <div style={{
+    background: '#2E77BC',
+    padding: '4px 7px',
+    borderRadius: '3px',
+    boxShadow: '0 1px 2px rgba(0,0,0,0.2)',
+  }}>
+    <div style={{
+      color: '#fff',
+      fontFamily: 'Arial, sans-serif',
+      fontWeight: 700,
+      fontSize: '7px',
+      letterSpacing: '0.3px',
+      lineHeight: 1.1,
+      textAlign: 'center',
+    }}>
+      AMERICAN<br />EXPRESS
+    </div>
+  </div>
+);
+
+const RedwoodLogo = () => (
+  <div style={{
+    background: 'linear-gradient(135deg, #B8860B 0%, #FFD700 50%, #B8860B 100%)',
+    padding: '4px 10px',
+    borderRadius: '4px',
+    border: '0.5px solid rgba(255,215,0,0.5)',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+  }}>
+    <span style={{
+      color: '#0A1E3F',
+      fontFamily: 'Georgia, serif',
+      fontWeight: 900,
+      fontSize: '11px',
+      letterSpacing: '1.5px',
+      lineHeight: 1,
+    }}>RWD</span>
+  </div>
+);
+
+function getNetworkLogo(network) {
+  switch ((network || '').toUpperCase()) {
+    case 'VISA': return <VisaLogo />;
+    case 'MASTERCARD': return <MasterCardLogo />;
+    case 'AMEX': return <AmexLogo />;
+    case 'REDWOOD': return <RedwoodLogo />;
+    default: return <MasterCardLogo />;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Tier resolution — prefer stored cardBrand, fall back to name parsing
+   so legacy accounts (without cardBrand) still render correctly.
+   ─────────────────────────────────────────────────────────────────────────── */
+function resolveTier(account) {
+  if (account?.cardBrand && TIER_STYLES[account.cardBrand]) return account.cardBrand;
+  const name = account?.name?.toUpperCase() || '';
+  if (name.includes('PLATINUM ELITE') || name.includes('PLATINUM_ELITE')) return 'PLATINUM_ELITE';
+  if (name.includes('ONYX') || name.includes('BLACK CARD') || name.includes('BLACK_CARD')) return 'BLACK_CARD';
+  if (name.includes('AMERICAN EXPRESS') || name.includes('AMEX')) return 'AMEX_PLATINUM';
+  if (name.includes('REDWOOD PREFERRED') || name.includes('REDWOOD_PREFERRED') || name.includes('PREFERRED')) return 'REDWOOD_PREFERRED';
+  return 'DEFAULT';
+}
+
+function resolveNetwork(account, tier) {
+  if (account?.cardNetwork) return account.cardNetwork.toUpperCase();
+  // Sensible defaults if no network is stored yet
+  if (tier === 'AMEX_PLATINUM') return 'AMEX';
+  if (tier === 'BLACK_CARD') return 'REDWOOD';
+  return 'MASTERCARD';
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
 const CreditCardVisual = ({ account }) => {
   const { user } = useAuthStore();
 
-  // Card Brand / Style identification logic
-  const getCardStyle = () => {
-    // CRASH-PROOF: Ensure name exists before string operations
-    const name = account?.name?.toUpperCase() || '';
+  const tier = resolveTier(account);
+  const style = TIER_STYLES[tier];
+  const network = resolveNetwork(account, tier);
 
-    if (name.includes('PLATINUM ELITE') || name.includes('PLATINUM_ELITE')) {
-      return {
-        background: 'linear-gradient(135deg, #d1d5db 0%, #9ca3af 50%, #6b7280 100%)',
-        textColor: '#111827',
-        secondaryColor: '#374151',
-        type: 'PLATINUM_ELITE',
-        brandName: 'REDWOOD PLATINUM ELITE',
-        isPremium: true
-      };
-    }
-    if (name.includes('ONYX RESERVE') || name.includes('BLACK CARD') || name.includes('BLACK_CARD')) {
-      return {
-        background: 'linear-gradient(135deg, #18181b 0%, #09090b 50%, #27272a 100%)',
-        textColor: '#f4f4f5',
-        secondaryColor: '#a1a1aa',
-        type: 'BLACK_CARD',
-        brandName: 'REDWOOD ONYX',
-        isBlack: true
-      };
-    }
-    if (name.includes('REDWOOD PREFERRED') || name.includes('REDWOOD_PREFERRED')) {
-      return {
-        background: 'linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #1e3a8a 100%)',
-        textColor: '#ffffff',
-        secondaryColor: '#93c5fd',
-        type: 'REDWOOD_PREFERRED_RESERVE',
-        brandName: 'REDWOOD PREFERRED',
-        isPremium: true
-      };
-    }
-    return {
-      background: 'linear-gradient(135deg, #117aca 0%, #0e65a8 100%)',
-      textColor: '#ffffff',
-      secondaryColor: '#e2e8f0',
-      type: 'DEFAULT',
-      brandName: 'REDWOOD CREST'
-    };
-  };
-
-  const style = getCardStyle();
   const holderName = `${user?.firstName || ''} ${user?.lastName || ''}`.trim().toUpperCase() || 'VALUED CUSTOMER';
-
-  // CRASH-PROOF: Ensure accountNumber exists
   const maskedNumber = `**** **** **** ${account?.accountNumber || '0000'}`;
 
-  // STANDARD RENDERING (Visa/MC)
   return (
-    <div className="relative group overflow-hidden shadow-2xl transition-all duration-500 hover:scale-[1.02] border border-black/10 w-full"
-         style={{
-           width: '100%',
-           maxWidth: '360px',
-           height: 'auto',
-           aspectRatio: '360 / 227',
-           borderRadius: '14px',
-           background: style.background 
-         }}>
-      
-      <div className="absolute inset-0 opacity-20 pointer-events-none" 
-           style={{ backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 80%)' }} />
-      
-      <div className="relative h-full p-6 flex flex-col justify-between text-shadow text-white" 
-           style={{ color: style.textColor }}>
-        
-        <div className="flex justify-between items-start">
-          <div className="flex flex-col">
+    <div className="rwd-card-wrapper" style={{ perspective: '1200px', width: '100%', maxWidth: '360px' }}>
+      <div
+        className="rwd-card relative overflow-hidden border border-black/10"
+        style={{
+          width: '100%',
+          aspectRatio: '360 / 227',
+          borderRadius: '14px',
+          background: style.background,
+          boxShadow: '0 12px 24px -10px rgba(0,0,0,0.35), 0 6px 14px -8px rgba(0,0,0,0.25)',
+          transformStyle: 'preserve-3d',
+          transition: 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.6s cubic-bezier(0.23, 1, 0.32, 1)',
+          willChange: 'transform',
+        }}
+      >
+        {/* Embossed bank logo watermark */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '75%',
+            opacity: 0.07,
+            mixBlendMode: 'overlay',
+          }}
+        >
+          <img
+            src="/logo.png?v=18"
+            alt=""
+            style={{
+              width: '100%',
+              height: 'auto',
+              filter: style.logoFilter,
+              objectFit: 'contain',
+              display: 'block',
+            }}
+          />
+        </div>
+
+        {/* Soft radial highlight */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: 'radial-gradient(circle at 30% 20%, rgba(255,255,255,0.18) 0%, transparent 60%)',
+          }}
+        />
+
+        {/* Shine sweep on hover */}
+        <div className="rwd-card-shine absolute inset-0 pointer-events-none" />
+
+        {/* Foreground content */}
+        <div className="relative h-full p-6 flex flex-col justify-between" style={{ color: style.textColor }}>
+
+          {/* Top row: brand label + chip */}
+          <div className="flex justify-between items-start">
             <span className="text-[10px] font-bold tracking-[0.2em] opacity-80 uppercase">
-               {style.brandName}
+              {style.brandName}
             </span>
+            <div className="w-10 h-8 bg-gradient-to-br from-yellow-300 to-yellow-600 rounded-md shadow-inner flex items-center justify-center border border-yellow-400/50">
+              <div className="w-full h-full p-1.5 grid grid-cols-2 gap-0.5 opacity-60">
+                <div className="border border-yellow-800/30 rounded-[1px]" />
+                <div className="border border-yellow-800/30 rounded-[1px]" />
+                <div className="border border-yellow-800/30 rounded-[1px]" />
+                <div className="border border-yellow-800/30 rounded-[1px]" />
+              </div>
+            </div>
           </div>
-          <div className="w-10 h-8 bg-gradient-to-br from-yellow-300 to-yellow-600 rounded-md shadow-inner flex items-center justify-center border border-yellow-400/50">
-             <div className="w-full h-full p-1.5 grid grid-cols-2 gap-0.5 opacity-60">
-                <div className="border border-yellow-800/30 rounded-[1px]" />
-                <div className="border border-yellow-800/30 rounded-[1px]" />
-                <div className="border border-yellow-800/30 rounded-[1px]" />
-                <div className="border border-yellow-800/30 rounded-[1px]" />
-             </div>
-          </div>
-        </div>
 
-        <div className="mt-2 flex items-center gap-3">
-           <Wifi size={16} className="rotate-90 opacity-40 ml-1" />
-           <div className="flex-1">
-              <p className="text-xl font-medium tracking-[0.15em] font-mono">
-                {maskedNumber}
-              </p>
-           </div>
-        </div>
-
-        <div className="flex justify-between items-end">
-          <div className="flex flex-col gap-0.5 text-left">
-            <p className="text-[11px] font-medium opacity-60 mb-1">CARDMEMBER NAME</p>
-            <p className="text-sm font-bold tracking-wider">
-               {holderName}
+          {/* Middle: contactless + masked number */}
+          <div className="mt-2 flex items-center gap-3">
+            <Wifi size={16} className="rotate-90 opacity-40 ml-1" />
+            <p className="text-xl font-medium tracking-[0.15em] font-mono">
+              {maskedNumber}
             </p>
           </div>
-          
-          <div className="flex flex-col items-end gap-1">
-             <div className="flex flex-col items-end">
+
+          {/* Bottom: name / expiry / network */}
+          <div className="flex justify-between items-end">
+            <div className="flex flex-col gap-0.5 text-left">
+              <p className="text-[11px] font-medium opacity-60 mb-1">CARDMEMBER NAME</p>
+              <p className="text-sm font-bold tracking-wider">{holderName}</p>
+            </div>
+
+            <div className="flex flex-col items-end gap-1">
+              <div className="flex flex-col items-end">
                 <span className="text-[7px] font-bold opacity-50 uppercase">Good Thru</span>
                 <span className="text-xs font-mono">{account?.expiryDate || '04/31'}</span>
-             </div>
-             
-             <div className="mt-1">
-                {style.isBlack ? (
-                   <div className="px-2 py-0.5 border border-zinc-700 rounded bg-black flex items-center justify-center">
-                     <span className="text-[10px] font-serif font-bold text-zinc-400 leading-none">VISA</span>
-                   </div>
-                ) : (
-                   <div className="flex items-center">
-                      <div className="w-5 h-5 bg-red-600 rounded-full opacity-80" />
-                      <div className="w-5 h-5 bg-orange-500 rounded-full -ml-3 opacity-90" />
-                   </div>
-                )}
-             </div>
+              </div>
+              <div className="mt-1">{getNetworkLogo(network)}</div>
+            </div>
           </div>
         </div>
+
+        {/* Subtle top-right gradient sheen (always-on) */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/10 pointer-events-none" />
       </div>
-      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/10 pointer-events-none" />
+
+      {/* Hover animations — 3D tilt + shine sweep */}
+      <style>{`
+        .rwd-card-wrapper:hover .rwd-card {
+          transform: rotateY(-7deg) rotateX(5deg) scale(1.025);
+          box-shadow:
+            0 30px 60px -15px rgba(0,0,0,0.5),
+            0 18px 36px -18px rgba(0,0,0,0.55);
+        }
+        .rwd-card-shine {
+          background: linear-gradient(
+            105deg,
+            transparent 30%,
+            rgba(255,255,255,0.22) 45%,
+            rgba(255,255,255,0.38) 50%,
+            rgba(255,255,255,0.22) 55%,
+            transparent 70%
+          );
+          transform: translateX(-110%);
+          transition: transform 0.95s cubic-bezier(0.23, 1, 0.32, 1);
+          mix-blend-mode: overlay;
+        }
+        .rwd-card-wrapper:hover .rwd-card-shine {
+          transform: translateX(110%);
+        }
+      `}</style>
     </div>
   );
 };

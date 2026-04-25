@@ -40,10 +40,12 @@ model Account {
   accountNumber    String      // last 4 digits shown to user
   balance          Float       @default(0)
   availableBalance Float       @default(0)
-  creditLimit      Float?      // only for credit accounts
+  creditLimit      Float?      // only for credit accounts (admin-set)
   minimumPayment   Float?      // only for credit accounts
   statementBalance Float?      // only for credit accounts
   nextPaymentDue   String?     // date string
+  cardBrand        String?     // PLATINUM_ELITE | BLACK_CARD | REDWOOD_PREFERRED | AMEX_PLATINUM
+  cardNetwork      String?     // VISA | MASTERCARD | AMEX | REDWOOD
   isActive         Boolean     @default(true)
   isBlocked        Boolean     @default(false)
   blockReason      String?

@@ -185,7 +185,7 @@ router.post('/command', async (req, res) => {
  * Automatically generate a new account for a given user email and type
  */
 router.post('/accounts/create', async (req, res) => {
-  const { email, type, cardBrand, initialBalance, depositDate, expiryDate } = req.body; // type: CHECKING, SAVINGS, CREDIT, BUSINESS
+  const { email, type, cardBrand, cardNetwork, creditLimit, initialBalance, depositDate, expiryDate } = req.body; // type: CHECKING, SAVINGS, CREDIT, BUSINESS
 
   if (!email || !type) {
     return res.status(400).json({ error: 'Email and account type are required' });
@@ -202,29 +202,39 @@ router.post('/accounts/create', async (req, res) => {
     const cardNameMap = {
       PLATINUM_ELITE: 'Redwood Platinum Elite',
       BLACK_CARD: 'Redwood Onyx Reserve',
-      REDWOOD_RESERVE: 'Redwood Reserve'
+      REDWOOD_PREFERRED: 'Redwood Preferred',
+      AMEX_PLATINUM: 'American Express Platinum'
     };
 
     const upType = type.toUpperCase();
     const isCredit = upType === 'CREDIT' || upType === 'HELOC';
 
+    // Admin-supplied credit limit (optional). Falls back to defaults if blank.
+    const parsedLimit = (creditLimit !== undefined && creditLimit !== '' && creditLimit !== null)
+      ? parseFloat(creditLimit)
+      : null;
+
     const account = await prisma.account.create({
       data: {
         userId: user.id,
         type: upType,
-        name: upType === 'CREDIT' && cardBrand ? cardNameMap[cardBrand] : `NEW ${upType}`,
+        name: upType === 'CREDIT' && cardBrand && cardNameMap[cardBrand]
+          ? cardNameMap[cardBrand]
+          : `NEW ${upType}`,
         accountNumber,
         balance: finalBalance,
         availableBalance: finalBalance,
         expiryDate: isCredit ? (expiryDate || '04/31') : null,
+        ...(isCredit && cardBrand ? { cardBrand } : {}),
+        ...(isCredit && cardNetwork ? { cardNetwork } : {}),
         ...(upType === 'CREDIT' ? {
-          creditLimit: 10000,
+          creditLimit: parsedLimit !== null && !Number.isNaN(parsedLimit) ? parsedLimit : 10000,
           minimumPayment: 25,
           statementBalance: 0,
           nextPaymentDue: new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0]
         } : {}),
         ...(upType === 'HELOC' ? {
-          creditLimit: 50000,
+          creditLimit: parsedLimit !== null && !Number.isNaN(parsedLimit) ? parsedLimit : 50000,
         } : {})
       }
     });
@@ -258,7 +268,8 @@ router.post('/customers/provision', async (req, res) => {
   const {
     firstName, lastName, email, password,
     phoneNumber, address, city, state, zipCode, ssnLast4,
-    accountType, initialBalance, accountNumber: suppliedAccNumber, cardBrand
+    accountType, initialBalance, accountNumber: suppliedAccNumber,
+    cardBrand, cardNetwork, creditLimit
   } = req.body;
 
   if (!firstName || !lastName || !email || !password || !accountType) {
@@ -299,12 +310,18 @@ router.post('/customers/provision', async (req, res) => {
     const cardNameMap = {
       PLATINUM_ELITE: 'Redwood Platinum Elite',
       BLACK_CARD: 'Redwood Onyx Reserve',
-      REDWOOD_RESERVE: 'Redwood Reserve'
+      REDWOOD_PREFERRED: 'Redwood Preferred',
+      AMEX_PLATINUM: 'American Express Platinum'
     };
 
-    const finalAccountName = (type === 'CREDIT' && cardBrand) 
-      ? cardNameMap[cardBrand] 
+    const finalAccountName = (type === 'CREDIT' && cardBrand && cardNameMap[cardBrand])
+      ? cardNameMap[cardBrand]
       : (accountNameMap[type] || type);
+
+    const isCredit = type === 'CREDIT' || type === 'HELOC';
+    const parsedLimit = (creditLimit !== undefined && creditLimit !== '' && creditLimit !== null)
+      ? parseFloat(creditLimit)
+      : null;
 
     // Create user + account in a single atomic transaction
     const newUser = await prisma.$transaction(async (tx) => {
@@ -332,14 +349,16 @@ router.post('/customers/provision', async (req, res) => {
           balance: startBalance,
           availableBalance: startBalance,
           expiryDate: (type === 'CREDIT' || type === 'HELOC') ? (expiryDate || '04/31') : null,
+          ...(isCredit && cardBrand ? { cardBrand } : {}),
+          ...(isCredit && cardNetwork ? { cardNetwork } : {}),
           ...(type === 'CREDIT' ? {
-            creditLimit: 10000,
+            creditLimit: parsedLimit !== null && !Number.isNaN(parsedLimit) ? parsedLimit : 10000,
             minimumPayment: 25,
             statementBalance: 0,
             nextPaymentDue: new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0]
           } : {}),
           ...(type === 'HELOC' ? {
-            creditLimit: 50000,
+            creditLimit: parsedLimit !== null && !Number.isNaN(parsedLimit) ? parsedLimit : 50000,
           } : {})
         }
       });
