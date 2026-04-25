@@ -1,5 +1,6 @@
-import { Shield, Lock, HelpCircle } from 'lucide-react';
+import { Shield, Lock, HelpCircle, Mail, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { SUPPORT_EMAIL, SUPPORT_PHONE } from '../config/support';
 
 const Footer = () => {
   return (
@@ -41,6 +42,16 @@ const Footer = () => {
               <li><Link to="/atm-locator" className="hover:text-white transition-colors">ATM & Branch Locator</Link></li>
               <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
               <li><Link to="/faqs" className="hover:text-white transition-colors">FAQs</Link></li>
+              <li>
+                <a href={`mailto:${SUPPORT_EMAIL}`} className="hover:text-white transition-colors flex items-center gap-1 break-all">
+                  <Mail size={12} />{SUPPORT_EMAIL}
+                </a>
+              </li>
+              <li>
+                <a href={`tel:${SUPPORT_PHONE.replace(/[^+\d]/g, '')}`} className="hover:text-white transition-colors flex items-center gap-1">
+                  <Phone size={12} />{SUPPORT_PHONE}
+                </a>
+              </li>
             </ul>
           </div>
         </div>

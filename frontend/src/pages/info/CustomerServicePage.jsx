@@ -1,10 +1,11 @@
 import InfoPageShell from './InfoPageShell';
 import { Phone, MessageCircle, Mail, Clock, MapPin, CreditCard, Wallet, Shield, HelpCircle } from 'lucide-react';
+import { SUPPORT_EMAIL, SUPPORT_PHONE } from '../../config/support';
 
 const contactMethods = [
-  { icon: Phone, title: 'Call Us', primary: '+1(603)661-9146', subtitle: 'Available 24/7 for account inquiries', highlight: true },
+  { icon: Phone, title: 'Call Us', primary: SUPPORT_PHONE, subtitle: 'Available 24/7 for account inquiries', highlight: true },
   { icon: MessageCircle, title: 'Live Chat', primary: 'Chat with an agent', subtitle: 'Mon-Fri 8 AM - 10 PM ET, Sat 9 AM - 5 PM ET', highlight: true },
-  { icon: Mail, title: 'Secure Message', primary: 'Send us a message', subtitle: 'Through your online banking inbox. Response within 24 hours.' },
+  { icon: Mail, title: 'Email Support', primary: SUPPORT_EMAIL, subtitle: 'Response within 24 hours', isEmail: true },
   { icon: MapPin, title: 'Visit a Branch', primary: '1,200+ locations', subtitle: 'Find your nearest branch or ATM' },
 ];
 
@@ -29,14 +30,22 @@ export default function CustomerServicePage() {
     <InfoPageShell title="Customer Service" subtitle="We're here to help. Reach us by phone, chat, message, or in person at any of our 1,200+ branches nationwide.">
       {/* Contact cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-        {contactMethods.map((c, i) => (
-          <div key={i} className={`rounded-xl p-5 text-center cursor-pointer transition-all hover:shadow-lg ${c.highlight ? 'bg-[#0A1E3F] text-white' : 'bg-white border border-gray-200 text-gray-800 hover:border-blue-300'}`}>
-            <c.icon className={`w-8 h-8 mx-auto mb-3 ${c.highlight ? 'text-blue-200' : 'text-[#0A1E3F]'}`} />
-            <h3 className="font-semibold text-sm mb-1">{c.title}</h3>
-            <p className={`text-sm font-medium ${c.highlight ? 'text-white' : 'text-[#0A1E3F]'}`}>{c.primary}</p>
-            <p className={`text-xs mt-1 ${c.highlight ? 'text-blue-200' : 'text-gray-500'}`}>{c.subtitle}</p>
-          </div>
-        ))}
+        {contactMethods.map((c, i) => {
+          const Card = (
+            <>
+              <c.icon className={`w-8 h-8 mx-auto mb-3 ${c.highlight ? 'text-blue-200' : 'text-[#0A1E3F]'}`} />
+              <h3 className="font-semibold text-sm mb-1">{c.title}</h3>
+              <p className={`text-sm font-medium break-all ${c.highlight ? 'text-white' : 'text-[#0A1E3F]'}`}>{c.primary}</p>
+              <p className={`text-xs mt-1 ${c.highlight ? 'text-blue-200' : 'text-gray-500'}`}>{c.subtitle}</p>
+            </>
+          );
+          const className = `rounded-xl p-5 text-center cursor-pointer transition-all hover:shadow-lg block ${c.highlight ? 'bg-[#0A1E3F] text-white' : 'bg-white border border-gray-200 text-gray-800 hover:border-blue-300'}`;
+          return c.isEmail ? (
+            <a key={i} href={`mailto:${c.primary}`} className={className}>{Card}</a>
+          ) : (
+            <div key={i} className={className}>{Card}</div>
+          );
+        })}
       </div>
 
       {/* Quick Help */}
@@ -79,8 +88,10 @@ export default function CustomerServicePage() {
       </div>
 
       <div className="bg-gray-50 rounded-xl p-6 text-center">
-        <p className="text-sm text-gray-600">For TTY/TDD services, call <strong>+1(603)661-9146</strong></p>
-        <p className="text-xs text-gray-400 mt-2">International callers: +1(603)661-9146 | support@redwoodcresthq.com</p>
+        <p className="text-sm text-gray-600">For TTY/TDD services, call <strong>{SUPPORT_PHONE}</strong></p>
+        <p className="text-xs text-gray-400 mt-2">
+          International callers: {SUPPORT_PHONE} | <a href={`mailto:${SUPPORT_EMAIL}`} className="underline hover:text-[#0A1E3F]">{SUPPORT_EMAIL}</a>
+        </p>
       </div>
     </InfoPageShell>
   );

@@ -5,6 +5,8 @@ import AccountCard from '../components/AccountCard';
 import CreditCardVisual from '../components/CreditCardVisual';
 import { Link } from 'react-router-dom';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import { AlertCircle, Mail } from 'lucide-react';
+import { SUPPORT_EMAIL } from '../config/support';
 
 const CHART_COLORS = ['#117aca', '#0e65a8', '#38bdf8', '#f59e0b', '#10b981', '#8b5cf6', '#ef4444', '#6366f1', '#ec4899', '#14b8a6'];
 
@@ -63,6 +65,7 @@ const DashboardPage = () => {
   const depositAccounts = accounts.filter(a => !['CREDIT', 'HELOC', 'AUTO_LOAN', 'MORTGAGE'].includes(a.type));
   const creditAccounts = accounts.filter(a => a.type === 'CREDIT');
   const loanAccounts = accounts.filter(a => ['HELOC', 'AUTO_LOAN', 'MORTGAGE'].includes(a.type));
+  const heldAccounts = accounts.filter(a => a.isBlocked);
 
   const totalSpending = spendingData.reduce((sum, d) => sum + d.value, 0);
 
@@ -85,7 +88,42 @@ const DashboardPage = () => {
        <div className="mb-8">
          <h1 className="text-3xl font-light text-brand-text mb-1">{getGreeting()}, {user?.firstName}</h1>
          <div className="text-sm text-gray-600 mb-6">As of {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>
-         
+
+         {heldAccounts.length > 0 && (
+           <div className="mb-6 rounded-lg overflow-hidden border border-amber-300 shadow-sm">
+             <div className="bg-amber-50 p-5 flex items-start gap-3">
+               <div className="bg-amber-100 p-2 rounded-full mt-0.5">
+                 <AlertCircle size={20} className="text-amber-700" />
+               </div>
+               <div className="flex-1">
+                 <div className="font-bold text-amber-900 text-base">
+                   {heldAccounts.length === 1 ? 'Account on Hold' : `${heldAccounts.length} Accounts on Hold`}
+                 </div>
+                 <div className="text-sm text-amber-800 mt-1">
+                   The following {heldAccounts.length === 1 ? 'account has' : 'accounts have'} been temporarily restricted. You won't be able to transfer, pay, or wire from {heldAccounts.length === 1 ? 'it' : 'them'} until the hold is lifted.
+                 </div>
+                 <ul className="mt-3 space-y-1.5">
+                   {heldAccounts.map(a => (
+                     <li key={a.id} className="text-sm text-amber-900">
+                       <span className="font-semibold">{a.name} (...{a.accountNumber})</span>
+                       {a.blockReason && (
+                         <span className="text-amber-700"> — {a.blockReason}</span>
+                       )}
+                     </li>
+                   ))}
+                 </ul>
+               </div>
+             </div>
+             <div className="bg-amber-100/60 px-5 py-3 border-t border-amber-200 flex flex-wrap items-center gap-2">
+               <Mail size={14} className="text-amber-900" />
+               <span className="text-amber-900 text-xs font-semibold">Contact Customer Support:</span>
+               <a href={`mailto:${SUPPORT_EMAIL}`} className="text-amber-800 text-xs font-medium underline hover:text-amber-950">
+                 {SUPPORT_EMAIL}
+               </a>
+             </div>
+           </div>
+         )}
+
          {/* Portfolio summary for classic banking feel */}
          <div className="bg-white border border-brand-border rounded shadow-sm p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="min-w-0">

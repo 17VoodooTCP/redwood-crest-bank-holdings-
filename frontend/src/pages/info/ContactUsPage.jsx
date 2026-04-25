@@ -1,6 +1,7 @@
 import InfoPageShell from './InfoPageShell';
 import { Phone, Mail, MapPin, MessageCircle, Globe, Send } from 'lucide-react';
 import { useState } from 'react';
+import { SUPPORT_EMAIL, SUPPORT_PHONE } from '../../config/support';
 
 export default function ContactUsPage() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
@@ -61,11 +62,11 @@ export default function ContactUsPage() {
           <h2 className="text-xl font-bold text-gray-900 mb-4">Other Ways to Reach Us</h2>
           <div className="space-y-4">
             {[
-              { icon: Phone, title: 'Phone', lines: ['General: +1(603)661-9146', 'Credit Cards: +1(603)661-9146', 'Fraud Hotline: +1(603)661-9146'] },
+              { icon: Phone, title: 'Phone', lines: [`General: ${SUPPORT_PHONE}`, `Credit Cards: ${SUPPORT_PHONE}`, `Fraud Hotline: ${SUPPORT_PHONE}`] },
               { icon: MessageCircle, title: 'Live Chat', lines: ['Available through online banking', 'Mon-Fri 8 AM - 10 PM ET', 'Sat 9 AM - 5 PM ET'] },
-              { icon: Mail, title: 'Email', lines: ['support@redwoodcresthq.com', 'P.O. Box 15298', 'San Francisco, CA 94115-0298'] },
+              { icon: Mail, title: 'Email', lines: [SUPPORT_EMAIL, 'P.O. Box 15298', 'San Francisco, CA 94115-0298'] },
               { icon: MapPin, title: 'Headquarters', lines: ['1442 Redwood Valley Road', 'San Francisco, CA 94105', 'United States'] },
-              { icon: Globe, title: 'International', lines: ['From outside the US:', '+1(603)661-9146', 'Mon-Fri 9 AM - 6 PM ET'] },
+              { icon: Globe, title: 'International', lines: ['From outside the US:', SUPPORT_PHONE, 'Mon-Fri 9 AM - 6 PM ET'] },
             ].map((c, i) => (
               <div key={i} className="flex gap-4 p-4 border border-gray-200 rounded-xl">
                 <div className="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center shrink-0">

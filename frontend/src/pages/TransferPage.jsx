@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
 import api from '../services/api';
 import { Link } from 'react-router-dom';
+import { SUPPORT_EMAIL } from '../config/support';
 
 const TransferPage = () => {
   const [accounts, setAccounts] = useState([]);
@@ -94,8 +95,8 @@ const TransferPage = () => {
                  </div>
                </div>
                <div className="bg-amber-100/60 px-5 py-3 border-t border-amber-200 flex items-center gap-2">
-                 <span className="text-amber-900 text-xs font-semibold">✉ Contact Customer Service:</span>
-                 <span className="text-amber-800 text-xs font-medium">support@redwoodcresthq.com</span>
+                 <span className="text-amber-900 text-xs font-semibold">✉ Contact Customer Support:</span>
+                 <a href={`mailto:${SUPPORT_EMAIL}`} className="text-amber-800 text-xs font-medium underline hover:text-amber-950">{SUPPORT_EMAIL}</a>
                </div>
              </div>
           )}

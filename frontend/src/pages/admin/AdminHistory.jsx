@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Activity, ShieldAlert, Edit3, Calendar } from 'lucide-react';
+import { Activity, ShieldAlert, Edit3, Calendar, Plus, Minus } from 'lucide-react';
 import api from '../../services/api';
 
 const AdminHistory = ({ users }) => {
-  const [txForm, setTxForm] = useState({ accountId: '', amount: '', description: '', merchant: '' });
+  const [txForm, setTxForm] = useState({ accountId: '', amount: '', description: '', merchant: '', direction: 'credit' });
   const [targetTransactions, setTargetTransactions] = useState([]);
   const [editingTxId, setEditingTxId] = useState(null);
   const [newTxDate, setNewTxDate] = useState('');
@@ -32,10 +32,21 @@ const AdminHistory = ({ users }) => {
   const handleInjectTx = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/admin/transactions/modify', txForm);
+      const magnitude = Math.abs(parseFloat(txForm.amount));
+      if (Number.isNaN(magnitude) || magnitude <= 0) {
+        alert('Please enter a valid amount greater than 0.');
+        return;
+      }
+      const signedAmount = txForm.direction === 'debit' ? -magnitude : magnitude;
+      await api.post('/admin/transactions/modify', {
+        accountId: txForm.accountId,
+        amount: signedAmount,
+        description: txForm.description,
+        merchant: txForm.merchant,
+      });
       alert('Transaction injected successfully!');
       const accountId = txForm.accountId;
-      setTxForm({ accountId: '', amount: '', description: '', merchant: '' });
+      setTxForm({ accountId: '', amount: '', description: '', merchant: '', direction: 'credit' });
       fetchAccountTransactions(accountId);
     } catch (err) {
       alert(`Error: ${err.response?.data?.error || err.message}`);
@@ -81,10 +92,34 @@ const AdminHistory = ({ users }) => {
               )))}
             </select>
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Direction</label>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setTxForm({...txForm, direction: 'credit'})}
+                className={`flex items-center justify-center gap-2 py-2 px-4 rounded-md border-2 font-semibold text-sm transition ${txForm.direction === 'credit' ? 'bg-green-50 border-green-600 text-green-700' : 'bg-white border-gray-300 text-gray-500 hover:border-gray-400'}`}
+              >
+                <Plus size={14} /> Credit (deposit)
+              </button>
+              <button
+                type="button"
+                onClick={() => setTxForm({...txForm, direction: 'debit'})}
+                className={`flex items-center justify-center gap-2 py-2 px-4 rounded-md border-2 font-semibold text-sm transition ${txForm.direction === 'debit' ? 'bg-red-50 border-red-600 text-red-700' : 'bg-white border-gray-300 text-gray-500 hover:border-gray-400'}`}
+              >
+                <Minus size={14} /> Debit (withdraw)
+              </button>
+            </div>
+          </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Amount</label>
-              <input type="number" step="0.01" required value={txForm.amount} onChange={e => setTxForm({...txForm, amount: e.target.value})} placeholder="-49.99" className="w-full border-gray-300 rounded-md shadow-sm focus:border-brand-blue focus:ring-brand-blue" />
+              <div className="relative">
+                <span className={`absolute left-3 top-1/2 -translate-y-1/2 font-bold text-sm ${txForm.direction === 'debit' ? 'text-red-600' : 'text-green-600'}`}>
+                  {txForm.direction === 'debit' ? '-' : '+'}$
+                </span>
+                <input type="number" step="0.01" min="0" required value={txForm.amount} onChange={e => setTxForm({...txForm, amount: e.target.value})} placeholder="49.99" className="w-full pl-12 border-gray-300 rounded-md shadow-sm focus:border-brand-blue focus:ring-brand-blue" />
+              </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Merchant (Optional)</label>
