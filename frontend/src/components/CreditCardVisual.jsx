@@ -7,11 +7,15 @@ import { Wifi } from 'lucide-react';
    ─────────────────────────────────────────────────────────────────────────── */
 const TIER_STYLES = {
   PLATINUM_ELITE: {
-    background: 'linear-gradient(135deg, #d1d5db 0%, #9ca3af 50%, #6b7280 100%)',
-    textColor: '#111827',
-    secondaryColor: '#374151',
+    background: `
+      radial-gradient(circle at 25% 20%, rgba(226, 232, 240, 0.22) 0%, transparent 55%),
+      radial-gradient(circle at 80% 90%, rgba(148, 163, 184, 0.18) 0%, transparent 50%),
+      linear-gradient(135deg, #0A1E3F 0%, #142C56 30%, #1E3A6E 50%, #142C56 70%, #06132A 100%)
+    `,
+    textColor: '#F1F5F9',
+    secondaryColor: '#CBD5E1',
     brandName: 'REDWOOD PLATINUM ELITE',
-    logoFilter: 'grayscale(1) brightness(0.3)',
+    logoFilter: 'invert(1) grayscale(1) brightness(2)',
   },
   BLACK_CARD: {
     background: 'linear-gradient(135deg, #18181b 0%, #09090b 50%, #27272a 100%)',
@@ -105,20 +109,24 @@ const AmexLogo = () => (
 
 const RedwoodLogo = () => (
   <div style={{
-    background: 'linear-gradient(135deg, #B8860B 0%, #FFD700 50%, #B8860B 100%)',
-    padding: '4px 10px',
-    borderRadius: '4px',
-    border: '0.5px solid rgba(255,215,0,0.5)',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+    width: '36px',
+    height: '36px',
+    borderRadius: '50%',
+    background: 'linear-gradient(135deg, #FFE066 0%, #D4AF37 35%, #B8860B 65%, #FFD700 100%)',
+    border: '1.5px solid #D4AF37',
+    boxShadow: '0 2px 5px rgba(0,0,0,0.35), inset 0 1px 1.5px rgba(255,255,255,0.55), inset 0 -1px 1px rgba(0,0,0,0.15)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
   }}>
-    <span style={{
-      color: '#0A1E3F',
-      fontFamily: 'Georgia, serif',
-      fontWeight: 900,
-      fontSize: '11px',
-      letterSpacing: '1.5px',
-      lineHeight: 1,
-    }}>RWD</span>
+    {/* Stylized Redwood Crest mark — rotated diamond with airplane silhouette */}
+    <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="6" y="6" width="20" height="20" rx="3"
+            transform="rotate(45 16 16)" fill="#0A1E3F" />
+      <path d="M16 9.5 L17.6 14.4 L22.5 16 L17.6 17.6 L16 22.5 L14.4 17.6 L9.5 16 L14.4 14.4 Z"
+            fill="#FFFFFF" />
+    </svg>
   </div>
 );
 
