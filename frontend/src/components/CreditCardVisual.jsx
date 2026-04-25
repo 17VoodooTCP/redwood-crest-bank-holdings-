@@ -174,7 +174,15 @@ const CreditCardVisual = ({ account }) => {
   const maskedNumber = `**** **** **** ${account?.accountNumber || '0000'}`;
 
   return (
-    <div className="rwd-card-wrapper" style={{ perspective: '1200px', width: '100%', maxWidth: '360px' }}>
+    <div
+      className="rwd-card-wrapper"
+      style={{
+        perspective: '1200px',
+        width: '100%',
+        maxWidth: '360px',
+        minWidth: 0, // critical: lets us shrink inside flex parents on small screens
+      }}
+    >
       <div
         className="rwd-card relative overflow-hidden border border-black/10"
         style={{
@@ -186,6 +194,9 @@ const CreditCardVisual = ({ account }) => {
           transformStyle: 'preserve-3d',
           transition: 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.6s cubic-bezier(0.23, 1, 0.32, 1)',
           willChange: 'transform',
+          // Use container queries so contents scale with the card itself,
+          // not with the viewport — keeps the same look on every device.
+          containerType: 'inline-size',
         }}
       >
         {/* Embossed bank logo watermark */}
@@ -224,15 +235,36 @@ const CreditCardVisual = ({ account }) => {
         {/* Shine sweep on hover */}
         <div className="rwd-card-shine absolute inset-0 pointer-events-none" />
 
-        {/* Foreground content */}
-        <div className="relative h-full p-6 flex flex-col justify-between" style={{ color: style.textColor }}>
+        {/* Foreground content — sized via container queries so the layout
+            scales with the card itself, never with the viewport. cqw = % of
+            the card's inline-size. */}
+        <div
+          className="relative h-full flex flex-col justify-between"
+          style={{
+            color: style.textColor,
+            padding: 'clamp(12px, 5.5cqw, 24px)',
+          }}
+        >
 
           {/* Top row: brand label + chip */}
-          <div className="flex justify-between items-start">
-            <span className="text-[10px] font-bold tracking-[0.2em] opacity-80 uppercase">
+          <div className="flex justify-between items-start gap-2">
+            <span
+              className="font-bold uppercase opacity-80 truncate"
+              style={{
+                fontSize: 'clamp(8px, 2.6cqw, 11px)',
+                letterSpacing: '0.18em',
+                minWidth: 0,
+              }}
+            >
               {style.brandName}
             </span>
-            <div className="w-10 h-8 bg-gradient-to-br from-yellow-300 to-yellow-600 rounded-md shadow-inner flex items-center justify-center border border-yellow-400/50">
+            <div
+              className="bg-gradient-to-br from-yellow-300 to-yellow-600 rounded-md shadow-inner flex items-center justify-center border border-yellow-400/50 shrink-0"
+              style={{
+                width: 'clamp(28px, 11cqw, 42px)',
+                height: 'clamp(22px, 9cqw, 34px)',
+              }}
+            >
               <div className="w-full h-full p-1.5 grid grid-cols-2 gap-0.5 opacity-60">
                 <div className="border border-yellow-800/30 rounded-[1px]" />
                 <div className="border border-yellow-800/30 rounded-[1px]" />
@@ -243,24 +275,62 @@ const CreditCardVisual = ({ account }) => {
           </div>
 
           {/* Middle: contactless + masked number */}
-          <div className="mt-2 flex items-center gap-3">
-            <Wifi size={16} className="rotate-90 opacity-40 ml-1" />
-            <p className="text-xl font-medium tracking-[0.15em] font-mono">
+          <div
+            className="flex items-center min-w-0"
+            style={{
+              marginTop: '0.5cqw',
+              gap: 'clamp(6px, 2.5cqw, 12px)',
+            }}
+          >
+            <Wifi
+              className="rotate-90 opacity-40 shrink-0"
+              style={{
+                width: 'clamp(12px, 4.4cqw, 18px)',
+                height: 'clamp(12px, 4.4cqw, 18px)',
+              }}
+            />
+            <p
+              className="font-medium font-mono truncate min-w-0"
+              style={{
+                fontSize: 'clamp(13px, 5.2cqw, 22px)',
+                letterSpacing: '0.12em',
+              }}
+            >
               {maskedNumber}
             </p>
           </div>
 
           {/* Bottom: name / expiry / network */}
-          <div className="flex justify-between items-end">
-            <div className="flex flex-col gap-0.5 text-left">
-              <p className="text-[11px] font-medium opacity-60 mb-1">CARDMEMBER NAME</p>
-              <p className="text-sm font-bold tracking-wider">{holderName}</p>
+          <div className="flex justify-between items-end gap-2 min-w-0">
+            <div className="flex flex-col gap-0.5 text-left min-w-0 flex-1">
+              <p
+                className="font-medium opacity-60 mb-1"
+                style={{ fontSize: 'clamp(8px, 2.8cqw, 11px)' }}
+              >
+                CARDMEMBER NAME
+              </p>
+              <p
+                className="font-bold tracking-wider truncate"
+                style={{ fontSize: 'clamp(10px, 3.6cqw, 14px)' }}
+              >
+                {holderName}
+              </p>
             </div>
 
-            <div className="flex flex-col items-end gap-1">
+            <div className="flex flex-col items-end gap-1 shrink-0">
               <div className="flex flex-col items-end">
-                <span className="text-[7px] font-bold opacity-50 uppercase">Good Thru</span>
-                <span className="text-xs font-mono">{account?.expiryDate || '04/31'}</span>
+                <span
+                  className="font-bold opacity-50 uppercase"
+                  style={{ fontSize: 'clamp(6px, 1.9cqw, 8px)' }}
+                >
+                  Good Thru
+                </span>
+                <span
+                  className="font-mono"
+                  style={{ fontSize: 'clamp(9px, 3.2cqw, 12px)' }}
+                >
+                  {account?.expiryDate || '04/31'}
+                </span>
               </div>
               <div className="mt-1">{getNetworkLogo(network)}</div>
             </div>

@@ -173,14 +173,16 @@ const DashboardPage = () => {
            
            <div className="grid grid-cols-1 gap-8">
              {creditAccounts.map(acc => (
-               <div key={acc.id} className="flex flex-col lg:flex-row gap-8 items-center bg-white border border-brand-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
-                  {/* Realistic Physical Card Visual */}
-                  <div className="w-full lg:w-auto lg:shrink-0" style={{ maxWidth: '420px' }}>
+               <div key={acc.id} className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-center bg-white border border-brand-border rounded-lg p-4 sm:p-5 lg:p-6 shadow-sm hover:shadow-md transition-shadow min-w-0 overflow-hidden">
+                  {/* Realistic Physical Card Visual.
+                      Mobile: w-full so it fills the panel up to its 360px maxWidth.
+                      lg+:   fixed-basis 360px column so the row layout has a stable card column. */}
+                  <div className="w-full max-w-[360px] lg:shrink-0 flex justify-center">
                      <CreditCardVisual account={acc} />
                   </div>
-                  
+
                   {/* Account Info Details */}
-                  <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="flex-1 w-full min-w-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                      <div className="flex flex-col justify-center">
                         <h3 className="text-lg font-medium text-brand-blue mb-2">{acc.name}</h3>
                         <div className="space-y-1">

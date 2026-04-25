@@ -37,7 +37,7 @@ const TopNav = () => {
         <div className="flex items-center justify-between px-3 md:px-8 h-[72px] w-full min-w-0">
           
           <div className="flex items-center h-full space-x-2 min-w-0 shrink-0">
-            <button className="sm:hidden p-1 focus:outline-none text-white shrink-0" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            <button className="lg:hidden p-1 focus:outline-none text-white shrink-0" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               <Menu size={22} />
             </button>
             <NavLink to="/" className="flex items-center h-full min-w-0" style={{ textDecoration: 'none' }}>
@@ -45,7 +45,7 @@ const TopNav = () => {
             </NavLink>
           </div>
 
-          <nav className="hidden sm:flex items-center h-full space-x-1">
+          <nav className="hidden lg:flex items-center h-full space-x-1">
             {navItems.map((item) => (
               <NavLink
                 key={item.name}
@@ -61,9 +61,11 @@ const TopNav = () => {
             ))}
           </nav>
 
-          <div className="flex items-center space-x-2 shrink-0">
-            <div 
-               className="relative hidden sm:block cursor-pointer"
+          <div className="flex items-center space-x-2 shrink-0 min-w-0">
+            {/* Full-width search pill only on lg+ where there's room beside the nav.
+                Below lg, fall back to the icon-only button so the bar never overflows. */}
+            <div
+               className="relative hidden lg:block cursor-pointer"
                onClick={() => window.dispatchEvent(new CustomEvent('open-assistant'))}
             >
               <div className="bg-white/10 hover:bg-white/20 text-white transition-colors rounded-full px-4 py-1.5 flex items-center space-x-2">
@@ -71,10 +73,11 @@ const TopNav = () => {
                 <span className="text-sm font-medium">How can we help?</span>
               </div>
             </div>
-            
-            <button 
-              className="sm:hidden p-1 text-white"
+
+            <button
+              className="lg:hidden p-1 text-white"
               onClick={() => window.dispatchEvent(new CustomEvent('open-assistant'))}
+              aria-label="Open assistant"
             >
                <Search size={20} />
             </button>
@@ -144,15 +147,15 @@ const TopNav = () => {
                )}
             </div>
 
-            <button className="sm:hidden p-1 text-blue-200 hover:text-white" onClick={handleLogout}>
+            <button className="lg:hidden p-1 text-blue-200 hover:text-white" onClick={handleLogout} aria-label="Sign out">
               <LogOut size={20} />
             </button>
           </div>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile / tablet menu (visible up through md) */}
         {isMenuOpen && (
-          <div className="sm:hidden bg-white text-brand-text border-b border-gray-200 absolute w-full shadow-lg">
+          <div className="lg:hidden bg-white text-brand-text border-b border-gray-200 absolute w-full shadow-lg z-50">
             {navItems.map((item) => (
               <NavLink
                 key={item.name}
