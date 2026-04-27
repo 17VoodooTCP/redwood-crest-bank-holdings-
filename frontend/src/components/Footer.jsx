@@ -79,6 +79,11 @@ const Footer = () => {
             Deposit products are offered by Redwood Crest Bank, N.A. Member FDIC. Equal Housing Lender.
             NMLS ID 123456.
           </div>
+          {/* Build marker — quick visual proof that the latest deploy is loaded.
+              If you don't see "build: mobile-fix" in the footer, you're on a stale cache. */}
+          <div className="mt-2 text-[10px] text-gray-600 text-center sm:text-left">
+            build: mobile-fix
+          </div>
         </div>
       </div>
     </footer>
