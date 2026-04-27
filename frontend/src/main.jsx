@@ -2,6 +2,13 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
+import { startVersionCheck, BUILT_VERSION_FOR_DEBUG } from './utils/versionCheck'
+
+// Detect & auto-reload stale bundles. Critical for iOS Safari where users
+// otherwise see old code for hours after a deploy.
+startVersionCheck()
+// Expose build version for debugging (paste `__BUILD__` in DevTools console).
+if (typeof window !== 'undefined') window.__BUILD__ = BUILT_VERSION_FOR_DEBUG
 
 /* ═══════════════════════════════════════════════════════════════════════
    MOBILE HORIZONTAL-SCROLL LOCKDOWN
