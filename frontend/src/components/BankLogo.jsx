@@ -19,7 +19,7 @@ const BankLogo = ({ size = 'nav' }) => {
   const isNav = size === 'nav';
 
   // Tunable per-size envelope. Width is derived from height via aspect-ratio.
-  const minH = isNav ? 30 : 44;     // 30px ≈ readable on iPhone SE (320px wide)
+  const minH = isNav ? 28 : 44;     // 28px ≈ readable + tight enough for iPhone SE (320px)
   const fluidH = isNav ? '5.6vw' : '8vw';
   const maxH = isNav ? 44 : 64;
 
@@ -28,8 +28,7 @@ const BankLogo = ({ size = 'nav' }) => {
       style={{
         height: `clamp(${minH}px, ${fluidH}, ${maxH}px)`,
         aspectRatio: '4.5 / 1',
-        flexShrink: 1,
-        minWidth: 0,
+        flexShrink: 0,           // never compress below natural aspect — clips the wordmark otherwise
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
