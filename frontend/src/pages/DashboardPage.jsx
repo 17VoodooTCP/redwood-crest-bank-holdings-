@@ -86,7 +86,7 @@ const DashboardPage = () => {
   return (
     <div className="max-w-5xl mx-auto">
        <div className="mb-8">
-         <h1 className="text-3xl font-light text-brand-text mb-1">{getGreeting()}, {user?.firstName}</h1>
+         <h1 className="text-2xl sm:text-3xl font-light text-brand-text mb-1 break-words">{getGreeting()}, {user?.firstName}</h1>
          <div className="text-sm text-gray-600 mb-6">As of {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>
 
          {heldAccounts.length > 0 && (
@@ -148,9 +148,9 @@ const DashboardPage = () => {
 
        {depositAccounts.length > 0 && (
          <div className="mb-8">
-           <div className="flex justify-between items-center mb-4 border-b border-gray-200 pb-2">
-              <h2 className="text-xl font-medium text-brand-text">Bank accounts</h2>
-              <span className="text-sm text-gray-500 font-medium">Total: ${depositAccounts.reduce((a,b)=>a+b.balance,0).toLocaleString('en-US', {minimumFractionDigits:2})}</span>
+           <div className="flex justify-between items-center mb-4 border-b border-gray-200 pb-2 gap-2 min-w-0">
+              <h2 className="text-xl font-medium text-brand-text shrink-0">Bank accounts</h2>
+              <span className="text-sm text-gray-500 font-medium truncate text-right min-w-0">Total: ${depositAccounts.reduce((a,b)=>a+b.balance,0).toLocaleString('en-US', {minimumFractionDigits:2})}</span>
            </div>
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
              {depositAccounts.map(acc => (
@@ -162,13 +162,11 @@ const DashboardPage = () => {
 
        {creditAccounts.length > 0 && (
          <div className="mb-12">
-           <div className="flex justify-between items-center mb-6 border-b border-gray-200 pb-2">
-              <h2 className="text-xl font-medium text-brand-text">Credit accounts</h2>
-              <div className="flex gap-4 items-center">
-                 <span className="text-sm text-gray-500 font-medium font-sans">
-                   Total Available: ${(creditAccounts.reduce((a,b)=>a+(b.creditLimit || 0),0) - Math.abs(creditAccounts.reduce((a,b)=>a+b.balance,0))).toLocaleString('en-US', {minimumFractionDigits:0})}
-                 </span>
-              </div>
+           <div className="flex justify-between items-center mb-6 border-b border-gray-200 pb-2 gap-2 min-w-0">
+              <h2 className="text-xl font-medium text-brand-text shrink-0">Credit accounts</h2>
+              <span className="text-sm text-gray-500 font-medium font-sans truncate text-right min-w-0">
+                Total Available: ${(creditAccounts.reduce((a,b)=>a+(b.creditLimit || 0),0) - Math.abs(creditAccounts.reduce((a,b)=>a+b.balance,0))).toLocaleString('en-US', {minimumFractionDigits:0})}
+              </span>
            </div>
            
            <div className="grid grid-cols-1 gap-8">
@@ -177,7 +175,7 @@ const DashboardPage = () => {
                   {/* Realistic Physical Card Visual.
                       Mobile: w-full so it fills the panel up to its 360px maxWidth.
                       lg+:   fixed-basis 360px column so the row layout has a stable card column. */}
-                  <div className="w-full max-w-[360px] lg:shrink-0 flex justify-center">
+                  <div className="w-full max-w-[min(360px,100%)] lg:shrink-0 flex justify-center min-w-0">
                      <CreditCardVisual account={acc} />
                   </div>
 
@@ -227,9 +225,9 @@ const DashboardPage = () => {
 
        {loanAccounts.length > 0 && (
          <div className="mb-8">
-           <div className="flex justify-between items-center mb-4 border-b border-gray-200 pb-2">
-              <h2 className="text-xl font-medium text-brand-text">Loans & Lines of Credit</h2>
-              <span className="text-sm text-gray-500 font-medium">Outstanding: ${Math.abs(loanAccounts.reduce((a,b)=>a+b.balance,0)).toLocaleString('en-US', {minimumFractionDigits:2})}</span>
+           <div className="flex justify-between items-center mb-4 border-b border-gray-200 pb-2 gap-2 min-w-0">
+              <h2 className="text-xl font-medium text-brand-text shrink-0">Loans & Lines of Credit</h2>
+              <span className="text-sm text-gray-500 font-medium truncate text-right min-w-0">Outstanding: ${Math.abs(loanAccounts.reduce((a,b)=>a+b.balance,0)).toLocaleString('en-US', {minimumFractionDigits:2})}</span>
            </div>
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
              {loanAccounts.map(acc => (

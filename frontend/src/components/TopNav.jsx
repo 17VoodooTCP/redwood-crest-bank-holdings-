@@ -34,7 +34,7 @@ const TopNav = () => {
 
       {/* Main navigation bar */}
       <header className="bg-gradient-to-b from-[#0f2847] to-[#0A1E3F] text-white relative z-40 w-full" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15)' }}>
-        <div className="flex items-center justify-between px-3 md:px-8 h-[72px] w-full min-w-0">
+        <div className="flex items-center justify-between px-2 sm:px-3 md:px-8 h-[72px] w-full min-w-0">
           
           <div className="flex items-center h-full space-x-2 min-w-0 shrink-0">
             <button className="lg:hidden p-1 focus:outline-none text-white shrink-0" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -61,7 +61,7 @@ const TopNav = () => {
             ))}
           </nav>
 
-          <div className="flex items-center space-x-2 shrink-0 min-w-0">
+          <div className="flex items-center space-x-1 sm:space-x-2 shrink-0 min-w-0">
             {/* Full-width search pill only on lg+ where there's room beside the nav.
                 Below lg, fall back to the icon-only button so the bar never overflows. */}
             <div
@@ -79,12 +79,12 @@ const TopNav = () => {
               onClick={() => window.dispatchEvent(new CustomEvent('open-assistant'))}
               aria-label="Open assistant"
             >
-               <Search size={20} />
+               <Search size={18} />
             </button>
 
             <div className="relative">
                <div
-                 className="flex items-center space-x-1 border-l border-white/20 pl-2 sm:pl-4 cursor-pointer group"
+                 className="flex items-center space-x-1 border-l border-white/20 pl-1.5 sm:pl-2 md:pl-4 cursor-pointer group"
                  onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
                >
                  <User size={20} className="text-blue-200 group-hover:text-white transition-colors" />
@@ -148,7 +148,7 @@ const TopNav = () => {
             </div>
 
             <button className="lg:hidden p-1 text-blue-200 hover:text-white" onClick={handleLogout} aria-label="Sign out">
-              <LogOut size={20} />
+              <LogOut size={18} />
             </button>
           </div>
         </div>
