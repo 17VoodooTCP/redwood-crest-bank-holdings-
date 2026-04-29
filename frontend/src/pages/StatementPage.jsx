@@ -62,9 +62,9 @@ const StatementPage = () => {
               <img src={`/logo.png?v=${Date.now()}`} alt="Redwood Crest Bank" style={{ height: '190px', width: 'auto', margin: '-71px 0', maxWidth: 'none', objectFit: 'contain' }} />
             </div>
             <div className="text-[10pt] leading-tight text-gray-600 uppercase font-sans font-bold tracking-tighter">
-              Redwood Crest Bank, N.A.<br/>
-              P.O. Box 12345<br/>
-              Wilmington, DE 19801-1234
+              Redwood Crest<br/>
+              Portfolio project<br/>
+              Fictional statement document
             </div>
           </div>
           <div className="text-right">
@@ -157,9 +157,9 @@ const StatementPage = () => {
               <span className="font-sans font-bold text-[10pt] uppercase tracking-widest">Secure Document</span>
            </div>
            <p className="text-[8pt] text-gray-500 leading-relaxed font-sans mb-4">
-             IMPORTANT INFORMATION: This statement is a formal record of your account activity. Please review it carefully. 
-             If you find any errors or have questions about a transaction, contact us within 60 days. 
-             Redwood Crest Bank is a Member FDIC and Equal Housing Lender.
+             This statement is part of a software engineering portfolio project. All account activity,
+             balances, and transactions shown are fictional. Redwood Crest is not a real financial
+             institution.
            </p>
            <div className="text-[7pt] text-gray-400 font-sans uppercase">
              RC-STMT-AUTO-2024 REV C | Page 1 of 1

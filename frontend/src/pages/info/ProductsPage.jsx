@@ -46,7 +46,7 @@ const products = {
         fee: '$5/mo',
         feeWaiver: 'Waived with $300 min balance or linked checking',
         apy: '4.00%',
-        features: ['$25 minimum opening deposit', 'Automatic savings plans', 'Unlimited digital transfers', 'FDIC insured up to $250,000', 'Goal-based savings tools', 'No minimum balance to earn APY'],
+        features: ['$25 minimum opening deposit', 'Automatic savings plans', 'Unlimited digital transfers', 'Goal-based savings tools', 'No minimum balance to earn APY'],
         highlight: true
       },
       {
@@ -55,7 +55,7 @@ const products = {
         fee: '$0/mo',
         feeWaiver: 'No monthly fee with $1,000 minimum',
         apy: '4.50%',
-        features: ['$1,000 minimum opening deposit', 'Check-writing privileges', 'Debit card access', 'Tiered interest rates', 'FDIC insured', 'Easy access to funds'],
+        features: ['$1,000 minimum opening deposit', 'Check-writing privileges', 'Debit card access', 'Tiered interest rates', 'Easy access to funds'],
         highlight: false
       },
     ]

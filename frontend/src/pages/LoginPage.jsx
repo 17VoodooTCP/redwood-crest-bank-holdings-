@@ -73,14 +73,7 @@ const LoginPage = () => {
             </div>
           </div>
 
-          {/* Nav items */}
-          <nav className="hidden md:flex items-center gap-1 text-[13px] font-medium text-gray-700 h-full">
-            {['Checking', 'Savings & CDs', 'Credit cards', 'Home loans', 'Auto', 'Investing', 'Education & goals', 'Travel'].map(item => (
-              <span key={item} className="px-3 h-full flex items-center hover:text-[#0A1E3F] cursor-pointer transition-colors whitespace-nowrap">
-                {item}
-              </span>
-            ))}
-          </nav>
+          {/* Nav items removed — Personal / Business / Commercial in the utility bar above is the only top-level nav. */}
         </div>
       </div>
 
@@ -359,12 +352,12 @@ const LoginPage = () => {
             <div>
               <h4 className="font-bold text-gray-800 text-sm mb-3">Investing by Redwood Crest</h4>
               <p>Partner with a global leader who puts your financial needs first. <Link to="/investor-relations" className="text-[#0A1E3F] underline">Invest your way</Link> — whether you want to do it yourself or with expert guidance, we have the products, tools, and expertise to help you reach your financial goals.</p>
-              <p className="mt-3 text-[10px] text-gray-500 leading-snug">INVESTMENT AND INSURANCE PRODUCTS ARE: • NOT FDIC INSURED • NOT INSURED BY ANY FEDERAL GOVERNMENT AGENCY • NOT A DEPOSIT OR OTHER OBLIGATION OF, OR GUARANTEED BY, REDWOOD CREST BANK, N.A. OR ANY OF ITS AFFILIATES • SUBJECT TO INVESTMENT RISKS, INCLUDING POSSIBLE LOSS OF THE PRINCIPAL AMOUNT INVESTED</p>
+              <p className="mt-3 text-[10px] text-gray-500 leading-snug">All investing content shown on this site is illustrative. No real investment products are offered.</p>
             </div>
             <div>
               <h4 className="font-bold text-gray-800 text-sm mb-3">Redwood Crest Private Client</h4>
               <p>Get more from a personalized relationship offering no everyday banking fees, priority service from a dedicated team and special perks and benefits. Connect with a Redwood Crest Private Client Banker at your nearest Redwood Crest branch to learn about eligibility requirements and all available benefits.</p>
-              <p className="mt-3 text-[10px] text-gray-500 leading-snug">INVESTMENT AND INSURANCE PRODUCTS ARE: • NOT A DEPOSIT • NOT FDIC INSURED • NOT INSURED BY ANY FEDERAL GOVERNMENT AGENCY • NO BANK GUARANTEE • MAY LOSE VALUE</p>
+              <p className="mt-3 text-[10px] text-gray-500 leading-snug">Private Client offerings shown are illustrative. This is a portfolio project, not a real banking service.</p>
             </div>
           </div>
         </div>
@@ -408,7 +401,7 @@ const LoginPage = () => {
             <span>Site Map</span>
           </div>
           <p className="text-[10px] text-gray-500 text-center leading-relaxed max-w-3xl mx-auto mb-4">
-            "Redwood Crest," "Redwood Crest Bank," the Redwood Crest logo and the tree symbol are trademarks of Redwood Crest Bank & Co. Redwood Crest Bank, N.A. is a wholly-owned subsidiary of Redwood Crest Bank & Co. Bank deposit accounts, such as checking and savings, may be subject to approval. Deposit products and related services are offered by Redwood Crest Bank, N.A. Member FDIC.
+            Redwood Crest is a personal software engineering portfolio project built by Antonio Hill. All accounts, balances, transactions, and product offerings shown are fictional. This site is not a bank and is not affiliated with any real financial institution.
           </p>
           <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs text-gray-600 mb-3">
             <Link to="/privacy" className="hover:text-[#0A1E3F]">Privacy</Link>
@@ -418,8 +411,8 @@ const LoginPage = () => {
           </div>
           <div className="flex justify-center gap-x-6 text-[11px] text-gray-500">
             <a href="#" className="underline hover:text-[#0A1E3F]">Give feedback</a>
-            <span>Member FDIC</span>
-            <span className="flex items-center gap-1"><Home size={12} /> Equal Housing Opportunity</span>
+            <span>Portfolio project</span>
+            <span>Not a real bank</span>
           </div>
         </div>
       </div>

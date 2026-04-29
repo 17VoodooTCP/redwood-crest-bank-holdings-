@@ -69,7 +69,7 @@ export default function PrivacyPolicyPage() {
         <Lock className="w-5 h-5 text-[#0A1E3F] mt-0.5 shrink-0" />
         <div>
           <p className="text-sm font-medium text-gray-900">Last Updated: March 1, 2026</p>
-          <p className="text-sm text-gray-600 mt-1">This privacy policy describes how Redwood Crest Bank, N.A. and its affiliates collect, use, share, and protect personal information. By using our services, you acknowledge that you have read and understood this policy.</p>
+          <p className="text-sm text-gray-600 mt-1">This privacy policy describes how Redwood Crest collects, uses, shares, and protects personal information for this portfolio project. Redwood Crest is not a real financial institution; the policy below is a sample document for demonstration purposes.</p>
         </div>
       </div>
 

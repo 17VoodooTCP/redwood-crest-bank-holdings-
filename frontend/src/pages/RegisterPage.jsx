@@ -319,7 +319,7 @@ const RegisterPage = () => {
                       className="mt-0.5 rounded border-gray-300 text-[#0A1E3F] focus:ring-[#0A1E3F]"
                     />
                     <span className="text-xs text-gray-600 leading-relaxed">
-                      I agree to the Redwood Crest <Link to="/terms" className="text-[#0A1E3F] underline">Terms of Use</Link>, <Link to="/privacy" className="text-[#0A1E3F] underline">Privacy Policy</Link>, and <Link to="/terms" className="text-[#0A1E3F] underline">Electronic Communications Agreement</Link>. I understand that Redwood Crest Bank, N.A. will use the information I provide to open and manage my account.
+                      I agree to the Redwood Crest <Link to="/terms" className="text-[#0A1E3F] underline">Terms of Use</Link>, <Link to="/privacy" className="text-[#0A1E3F] underline">Privacy Policy</Link>, and <Link to="/terms" className="text-[#0A1E3F] underline">Electronic Communications Agreement</Link>. I understand that Redwood Crest will use the information I provide to manage this fictional portfolio account.
                     </span>
                   </label>
                 </div>
@@ -380,7 +380,7 @@ const RegisterPage = () => {
           <Link to="/security-center" className="hover:text-[#0A1E3F]">Security</Link>
           <Link to="/terms" className="hover:text-[#0A1E3F]">Terms of Use</Link>
           <Link to="/accessibility" className="hover:text-[#0A1E3F]">Accessibility</Link>
-          <span>© {new Date().getFullYear()} Redwood Crest Bank, N.A. Member FDIC</span>
+          <span>© {new Date().getFullYear()} Redwood Crest · Portfolio project · Not a real bank</span>
         </div>
       </div>
     </div>
