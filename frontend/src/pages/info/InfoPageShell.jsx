@@ -40,7 +40,8 @@ export default function InfoPageShell({ title, subtitle, children }) {
 
       {/* Footer */}
       <div className="bg-[#2c2c2c] text-gray-400 text-xs py-6 text-center">
-        <p>© {new Date().getFullYear()} Redwood Crest · Built by Antonio Hill · Software engineering portfolio · Accounts shown are fictional</p>
+        <p>© {new Date().getFullYear()} Redwood Crest</p>
+        <p className="text-[10px] text-gray-500 mt-1">Personal portfolio · Accounts are fictional</p>
       </div>
     </div>
   );

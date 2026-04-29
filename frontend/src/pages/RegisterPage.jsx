@@ -380,7 +380,7 @@ const RegisterPage = () => {
           <Link to="/security-center" className="hover:text-[#0A1E3F]">Security</Link>
           <Link to="/terms" className="hover:text-[#0A1E3F]">Terms of Use</Link>
           <Link to="/accessibility" className="hover:text-[#0A1E3F]">Accessibility</Link>
-          <span>© {new Date().getFullYear()} Redwood Crest · Portfolio project · Not a real bank</span>
+          <span>© {new Date().getFullYear()} Redwood Crest · Personal portfolio · Accounts are fictional</span>
         </div>
       </div>
     </div>

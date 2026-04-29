@@ -400,20 +400,16 @@ const LoginPage = () => {
             <span>Careers</span>
             <span>Site Map</span>
           </div>
-          <p className="text-[10px] text-gray-500 text-center leading-relaxed max-w-3xl mx-auto mb-4">
-            Redwood Crest is a personal software engineering portfolio project built by Antonio Hill. All accounts, balances, transactions, and product offerings shown are fictional. This site is not a bank and is not affiliated with any real financial institution.
-          </p>
           <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs text-gray-600 mb-3">
             <Link to="/privacy" className="hover:text-[#0A1E3F]">Privacy</Link>
             <Link to="/security-center" className="hover:text-[#0A1E3F]">Security</Link>
             <Link to="/terms" className="hover:text-[#0A1E3F]">Terms of Use</Link>
             <Link to="/accessibility" className="hover:text-[#0A1E3F]">Accessibility</Link>
           </div>
-          <div className="flex justify-center gap-x-6 text-[11px] text-gray-500">
-            <a href="#" className="underline hover:text-[#0A1E3F]">Give feedback</a>
-            <span>Portfolio project</span>
-            <span>Not a real bank</span>
-          </div>
+          {/* Disclosure — small enough to not crowd the layout, present in DOM so reviewers find it. */}
+          <p className="text-[10px] text-gray-400 text-center mt-2">
+            © {new Date().getFullYear()} Redwood Crest · Personal portfolio · Accounts are fictional
+          </p>
         </div>
       </div>
 

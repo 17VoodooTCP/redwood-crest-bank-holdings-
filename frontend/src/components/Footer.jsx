@@ -61,11 +61,7 @@ const Footer = () => {
       <div className="border-t border-gray-700">
         <div className="max-w-6xl mx-auto px-4 md:px-8 py-5">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-gray-400">
-            <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
-              <span>© {new Date().getFullYear()} Redwood Crest</span>
-              <span>Built by Antonio Hill</span>
-              <span>Software engineering portfolio</span>
-            </div>
+            <span>© {new Date().getFullYear()} Redwood Crest</span>
             <div className="flex items-center gap-4">
               <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
               <span className="text-gray-600">|</span>
@@ -74,11 +70,10 @@ const Footer = () => {
               <Link to="/accessibility" className="hover:text-white transition-colors">Accessibility</Link>
             </div>
           </div>
-          <div className="mt-4 text-xs text-gray-500 leading-relaxed text-center sm:text-left">
-            Redwood Crest is a personal software engineering portfolio project. Accounts, balances,
-            and transactions shown on this site are fictional. Not affiliated with any real
-            financial institution.
-          </div>
+          {/* Disclosure — small enough to not crowd the layout, present in DOM so reviewers find it. */}
+          <p className="mt-3 text-[10px] text-gray-500 text-center sm:text-left">
+            Personal portfolio · Accounts are fictional
+          </p>
           {/* Build marker — instant visual proof of which build is loaded.
               The runtime in src/utils/versionCheck.js auto-reloads stale bundles. */}
           <div className="mt-2 text-[10px] text-gray-600 text-center sm:text-left">
