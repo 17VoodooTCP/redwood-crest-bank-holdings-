@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Eye, EyeOff, Check, ChevronRight, Shield, Lock, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, Check, ChevronRight, Shield, ArrowLeft } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 
 const steps = ['Personal Information', 'Create Login', 'Review & Submit'];
@@ -12,11 +12,6 @@ const RegisterPage = () => {
     lastName: '',
     email: '',
     phone: '',
-    address: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    ssn4: '',
     password: '',
     confirmPassword: '',
     agreeTerms: false,
@@ -173,32 +168,6 @@ const RegisterPage = () => {
                   <label className="block text-xs font-medium text-gray-700 mb-1">Phone number</label>
                   <input type="tel" value={form.phone} onChange={e => set('phone', e.target.value)} className={inputClass('phone')} placeholder="+1(603)661-9146" />
                 </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Street address</label>
-                  <input type="text" value={form.address} onChange={e => set('address', e.target.value)} className={inputClass('address')} placeholder="123 Main Street" />
-                </div>
-
-                <div className="grid grid-cols-4 gap-3">
-                  <div className="col-span-2">
-                    <label className="block text-xs font-medium text-gray-700 mb-1">City</label>
-                    <input type="text" value={form.city} onChange={e => set('city', e.target.value)} className={inputClass('city')} placeholder="City" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">State</label>
-                    <input type="text" value={form.state} onChange={e => set('state', e.target.value)} className={inputClass('state')} placeholder="NY" maxLength={2} />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">ZIP</label>
-                    <input type="text" value={form.zipCode} onChange={e => set('zipCode', e.target.value)} className={inputClass('zipCode')} placeholder="10001" maxLength={5} />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Last 4 digits of SSN</label>
-                  <input type="password" value={form.ssn4} onChange={e => set('ssn4', e.target.value.replace(/\D/g, ''))} className={inputClass('ssn4')} placeholder="****" maxLength={4} style={{ maxWidth: '140px' }} />
-                  <p className="text-[10px] text-gray-400 mt-1 flex items-center gap-1"><Lock size={10} /> This information is encrypted and securely stored</p>
-                </div>
               </div>
             )}
 
@@ -294,8 +263,6 @@ const RegisterPage = () => {
                       <span className="text-gray-500">Email</span>
                       <span className="text-gray-900 font-medium">{form.email}</span>
                       {form.phone && <><span className="text-gray-500">Phone</span><span className="text-gray-900">{form.phone}</span></>}
-                      {form.address && <><span className="text-gray-500">Address</span><span className="text-gray-900">{form.address}{form.city && `, ${form.city}`}{form.state && `, ${form.state}`} {form.zipCode}</span></>}
-                      {form.ssn4 && <><span className="text-gray-500">SSN</span><span className="text-gray-900">***-**-{form.ssn4}</span></>}
                     </div>
                   </div>
                   <div className="p-4">

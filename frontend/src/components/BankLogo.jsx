@@ -3,50 +3,44 @@ import React from 'react';
 /**
  * BankLogo
  * --------
- * The source asset (`/logo.png`, 1024×682) contains the "REDWOOD CREST" wordmark
- * plus the airplane-diamond mark inside roughly the central 625×140 region —
- * the rest of the canvas is whitespace.
+ * Uses `/logo-mark.png` — the wordmark + airplane mark cropped tight to its
+ * content (723×139, ≈5.2:1), so there is no surrounding whitespace to fight.
  *
  * Strategy:
- *   1. Size the container to the *visible content's* aspect ratio (~4.5:1)
- *      so it scales cleanly on every viewport.
- *   2. Over-scale the image inside the container (`height: 460%`) so the
- *      surrounding whitespace is what gets clipped — never the wordmark or mark.
- *   3. Use `clamp()` on the height so it has a sensible floor on tiny phones
- *      (iPhone SE / Android compact) and a ceiling on tablets+.
+ *   1. Container is sized by height (fluid `clamp()`), width derived from the
+ *      asset's real aspect ratio — so the whole wordmark always fits, on every
+ *      viewport, with nothing clipped on desktop or mobile.
+ *   2. `object-fit: contain` keeps it crisp; no over-scaling, no overflow clip.
+ *   3. The invert + screen blend turns the black wordmark white over the dark
+ *      navy bars it sits on (TopNav, InfoPageShell) while dropping the white bg.
  */
 const BankLogo = ({ size = 'nav' }) => {
   const isNav = size === 'nav';
 
-  // Tunable per-size envelope. Width is derived from height via aspect-ratio.
-  const minH = isNav ? 28 : 44;     // 28px ≈ readable + tight enough for iPhone SE (320px)
-  const fluidH = isNav ? '5.6vw' : '8vw';
-  const maxH = isNav ? 44 : 64;
+  // Tunable per-size height envelope. Width follows from aspect-ratio.
+  const minH = isNav ? 22 : 36;     // readable floor on iPhone SE (320px wide)
+  const fluidH = isNav ? '4.2vw' : '6vw';
+  const maxH = isNav ? 34 : 52;
 
   return (
     <div
       style={{
         height: `clamp(${minH}px, ${fluidH}, ${maxH}px)`,
-        aspectRatio: '4.5 / 1',
-        flexShrink: 0,           // never compress below natural aspect — clips the wordmark otherwise
+        aspectRatio: '723 / 139',
+        flexShrink: 0,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
-        overflow: 'hidden',
-        position: 'relative',
       }}
     >
       <img
-        src="/logo.png?v=18"
+        src="/logo-mark.png?v=1"
         alt="Redwood Crest"
         style={{
-          height: '460%',         // over-scale → clip whitespace, keep content visible
-          width: 'auto',
-          maxWidth: 'none',
+          height: '100%',
+          width: '100%',
           objectFit: 'contain',
           filter: 'invert(1) grayscale(1) brightness(2)',
           mixBlendMode: 'screen',
-          // Prevent iOS Safari from inflating image rendering
           userSelect: 'none',
           pointerEvents: 'none',
         }}

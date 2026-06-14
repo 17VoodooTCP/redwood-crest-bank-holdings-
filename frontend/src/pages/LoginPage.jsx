@@ -12,6 +12,7 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
 
   const { login, verify2FA } = useAuthStore();
   const navigate = useNavigate();
@@ -46,6 +47,29 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen bg-white" ref={() => { document.title = 'Redwood Crest Bank: Banking, Credit Cards, Loans, and Investing'; }}>
 
+      <style>{`
+        @keyframes lpOverlayIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes lpFlipIn {
+          0%   { transform: perspective(1600px) rotateY(-92deg) scale(.92); opacity: 0; }
+          55%  { opacity: 1; }
+          100% { transform: perspective(1600px) rotateY(0deg) scale(1); opacity: 1; }
+        }
+        @keyframes lpGloss { 0% { left: -75%; } 100% { left: 130%; } }
+        .lp-overlay { background: rgba(6,19,42,.55); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); animation: lpOverlayIn .25s ease forwards; }
+        .lp-flip-wrap { perspective: 1600px; }
+        .lp-flip-card { transform-origin: left center; backface-visibility: hidden; animation: lpFlipIn .72s cubic-bezier(.18,.85,.25,1) forwards; }
+        .lp-gloss {
+          position: absolute; top: 0; bottom: 0; left: -75%; width: 45%;
+          background: linear-gradient(105deg, transparent, rgba(255,255,255,.65), transparent);
+          transform: skewX(-16deg); pointer-events: none;
+          animation: lpGloss .85s ease .28s 1;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .lp-flip-card { animation: lpOverlayIn .2s ease forwards; }
+          .lp-gloss { display: none; }
+        }
+      `}</style>
+
       {/* ── Top utility bar ──────────────────────────────────────── */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-[1200px] mx-auto px-4 flex items-center justify-between h-10">
@@ -68,8 +92,8 @@ const LoginPage = () => {
         <div className="max-w-[1200px] mx-auto px-4 flex items-center h-12">
           {/* Logo */}
           <div className="flex items-center gap-2 mr-8 shrink-0">
-            <div style={{ height: '32px', width: '180px', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
-              <img src="/logo.png?v=18" alt="Redwood Crest" style={{ height: '130px', width: 'auto', margin: '-49px 0', maxWidth: 'none', objectFit: 'contain' }} />
+            <div style={{ height: '34px', display: 'flex', alignItems: 'center' }}>
+              <img src="/logo-mark.png?v=1" alt="Redwood Crest" style={{ height: '100%', width: 'auto', objectFit: 'contain' }} draggable={false} />
             </div>
           </div>
 
@@ -86,93 +110,124 @@ const LoginPage = () => {
             <div className="text-5xl md:text-6xl font-bold mb-2">$350</div>
             <h1 className="text-2xl md:text-3xl font-bold mb-3 leading-tight">New Redwood Crest checking customers</h1>
             <p className="text-blue-100 text-sm mb-6 leading-relaxed">Open a Redwood Crest Premier Checking® account with qualifying direct deposit activities.</p>
-            <Link to="/register" className="inline-block bg-white text-[#0A1E3F] font-semibold text-sm px-6 py-3 rounded hover:bg-gray-100 transition-colors">
-              Open an account
-            </Link>
-          </div>
-
-          {/* Right: Sign-in card */}
-          <div className="bg-white rounded-lg shadow-xl p-6 w-full md:w-[340px] shrink-0">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">
-              {requires2FA ? 'Verify your identity' : 'Welcome'}
-            </h2>
-
-            {error && (
-              <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-2.5 mb-4 text-xs rounded-r">
-                {error}
-              </div>
-            )}
-
-            <form onSubmit={handleLogin} className="space-y-3">
-              {!requires2FA ? (
-                <>
-                  <div>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Username"
-                      className="w-full border border-gray-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#0A1E3F] focus:ring-1 focus:ring-[#0A1E3F]"
-                      required
-                    />
-                  </div>
-                  <div className="relative">
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="Password"
-                      className="w-full border border-gray-300 rounded px-3 py-2.5 text-sm pr-16 focus:outline-none focus:border-[#0A1E3F] focus:ring-1 focus:ring-[#0A1E3F]"
-                      required
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#0A1E3F] text-xs font-medium"
-                    >
-                      {showPassword ? 'Hide' : 'Show'}
-                    </button>
-                  </div>
-                  <div className="flex items-center justify-between text-xs">
-                    <label className="flex items-center gap-1.5 cursor-pointer text-gray-600">
-                      <input type="checkbox" checked={rememberMe} onChange={() => setRememberMe(!rememberMe)} className="rounded border-gray-300" />
-                      Remember me
-                    </label>
-                    <Link to="/products/checking" className="text-[#0A1E3F] hover:underline font-medium">Use token ›</Link>
-                  </div>
-                </>
-              ) : (
-                <div>
-                  <input
-                    type="text"
-                    value={totpToken}
-                    onChange={(e) => setTotpToken(e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-2.5 text-sm text-center tracking-[0.3em] font-mono focus:outline-none focus:border-[#0A1E3F] focus:ring-1 focus:ring-[#0A1E3F]"
-                    placeholder="000000"
-                    maxLength={6}
-                    autoFocus
-                    required
-                  />
-                  <p className="text-xs text-gray-500 mt-2 text-center">Enter the code from your authenticator app.</p>
-                </div>
-              )}
-
+            <div className="flex flex-wrap items-center gap-3">
+              <Link to="/register" className="inline-block bg-white text-[#0A1E3F] font-semibold text-sm px-6 py-3 rounded hover:bg-gray-100 transition-colors">
+                Open an account
+              </Link>
               <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full bg-[#0A1E3F] hover:bg-[#06132A] text-white font-semibold py-2.5 rounded text-sm transition-colors disabled:opacity-60"
+                type="button"
+                onClick={() => setShowLogin(true)}
+                className="inline-flex items-center gap-2 bg-white text-[#0A1E3F] font-semibold text-sm px-6 py-3 rounded hover:bg-gray-100 transition-colors"
               >
-                {isLoading ? 'Signing in...' : (requires2FA ? 'Verify' : 'Sign in')}
+                <Lock size={15} /> Sign in
               </button>
-            </form>
-
-            <div className="mt-4 space-y-2 text-xs">
-              <a href="#" className="text-[#0A1E3F] hover:underline block">Forgot username/password? ›</a>
-              <Link to="/register" className="text-[#0A1E3F] hover:underline block">Not enrolled? Sign Up Now. ›</Link>
             </div>
           </div>
         </div>
       </div>
+
+      {/* ── Sign-in modal (mirror flip-in) ───────────────────────── */}
+      {showLogin && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 lp-overlay"
+          onClick={() => setShowLogin(false)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="lp-flip-wrap" onClick={(e) => e.stopPropagation()}>
+            <div className="bg-white rounded-xl shadow-2xl p-6 w-[92vw] max-w-[360px] relative lp-flip-card overflow-hidden">
+              <span className="lp-gloss" aria-hidden="true" />
+              <button
+                type="button"
+                onClick={() => setShowLogin(false)}
+                aria-label="Close"
+                className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-xl leading-none"
+              >
+                ×
+              </button>
+
+              <h2 className="text-lg font-semibold text-gray-800 mb-4">
+                {requires2FA ? 'Verify your identity' : 'Welcome'}
+              </h2>
+
+              {error && (
+                <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-2.5 mb-4 text-xs rounded-r">
+                  {error}
+                </div>
+              )}
+
+              <form onSubmit={handleLogin} className="space-y-3">
+                {!requires2FA ? (
+                  <>
+                    <div>
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Username"
+                        autoFocus
+                        className="w-full border border-gray-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#0A1E3F] focus:ring-1 focus:ring-[#0A1E3F]"
+                        required
+                      />
+                    </div>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Password"
+                        className="w-full border border-gray-300 rounded px-3 py-2.5 text-sm pr-16 focus:outline-none focus:border-[#0A1E3F] focus:ring-1 focus:ring-[#0A1E3F]"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#0A1E3F] text-xs font-medium"
+                      >
+                        {showPassword ? 'Hide' : 'Show'}
+                      </button>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <label className="flex items-center gap-1.5 cursor-pointer text-gray-600">
+                        <input type="checkbox" checked={rememberMe} onChange={() => setRememberMe(!rememberMe)} className="rounded border-gray-300" />
+                        Remember me
+                      </label>
+                      <Link to="/products/checking" className="text-[#0A1E3F] hover:underline font-medium">Use token ›</Link>
+                    </div>
+                  </>
+                ) : (
+                  <div>
+                    <input
+                      type="text"
+                      value={totpToken}
+                      onChange={(e) => setTotpToken(e.target.value)}
+                      className="w-full border border-gray-300 rounded px-3 py-2.5 text-sm text-center tracking-[0.3em] font-mono focus:outline-none focus:border-[#0A1E3F] focus:ring-1 focus:ring-[#0A1E3F]"
+                      placeholder="000000"
+                      maxLength={6}
+                      autoFocus
+                      required
+                    />
+                    <p className="text-xs text-gray-500 mt-2 text-center">Enter the code from your authenticator app.</p>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full bg-[#0A1E3F] hover:bg-[#06132A] text-white font-semibold py-2.5 rounded text-sm transition-colors disabled:opacity-60"
+                >
+                  {isLoading ? 'Signing in...' : (requires2FA ? 'Verify' : 'Sign in')}
+                </button>
+              </form>
+
+              <div className="mt-4 space-y-2 text-xs">
+                <a href="#" className="text-[#0A1E3F] hover:underline block">Forgot username/password? ›</a>
+                <Link to="/register" className="text-[#0A1E3F] hover:underline block">Not enrolled? Sign Up Now. ›</Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Choose what's right for you ──────────────────────────── */}
       <div className="bg-white py-10">

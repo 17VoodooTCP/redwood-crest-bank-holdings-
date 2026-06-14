@@ -1,0 +1,32 @@
+# Render Blueprint — deploys the Redwood Crest backend as an always-on Node
+# web service (Express + Socket.io). The frontend stays on Vercel/Netlify.
+#
+# Usage: Render dashboard → New → Blueprint → connect this repo. Render reads
+# this file, creates the service, and prompts for the secret env vars below.
+services:
+  - type: web
+    name: redwood-crest-backend
+    runtime: node
+    rootDir: backend
+    plan: free            # free tier spins down after ~15 min idle (cold start on next request)
+    region: oregon
+    branch: main
+    buildCommand: npm install
+    startCommand: npm run start
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Secrets — set these in the Render dashboard (sync:false = not stored in git):
+      - key: DATABASE_URL          # your MongoDB Atlas connection string
+        sync: false
+      - key: JWT_SECRET            # access-token signing key
+        sync: false
+      - key: JWT_REFRESH_SECRET    # refresh-token signing key
+        sync: false
+      - key: ADMIN_EMAIL           # admin console login
+        sync: false
+      - key: ADMIN_PASSWORD        # admin console password
+        sync: false
+      - key: FRONTEND_URL          # your Vercel frontend URL, e.g. https://your-app.vercel.app
+        sync: false

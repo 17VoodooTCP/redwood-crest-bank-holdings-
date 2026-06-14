@@ -58,8 +58,8 @@ const StatementPage = () => {
         {/* HEADER SECTION */}
         <div className="flex justify-between items-start border-b-2 border-brand-blue pb-8 mb-8">
           <div>
-            <div style={{ height: '48px', width: '260px', overflow: 'hidden', display: 'flex', alignItems: 'center', marginBottom: '24px' }}>
-              <img src={`/logo.png?v=${Date.now()}`} alt="Redwood Crest Bank" style={{ height: '190px', width: 'auto', margin: '-71px 0', maxWidth: 'none', objectFit: 'contain' }} />
+            <div style={{ height: '48px', display: 'flex', alignItems: 'center', marginBottom: '24px' }}>
+              <img src="/logo-mark.png?v=1" alt="Redwood Crest Bank" style={{ height: '100%', width: 'auto', objectFit: 'contain' }} draggable={false} />
             </div>
             <div className="text-[10pt] leading-tight text-gray-600 uppercase font-sans font-bold tracking-tighter">
               Redwood Crest<br/>

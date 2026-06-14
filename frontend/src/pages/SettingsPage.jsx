@@ -13,10 +13,6 @@ const SettingsPage = () => {
   const { user } = useAuthStore();
   const [formData, setFormData] = useState({
     phoneNumber: user?.phoneNumber || '',
-    address: user?.address || '',
-    city: user?.city || '',
-    state: user?.state || '',
-    zipCode: user?.zipCode || '',
   });
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
@@ -115,26 +111,6 @@ const SettingsPage = () => {
              <div>
                <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                <input type="text" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} className="w-full border-gray-300 rounded focus:border-brand-blue focus:ring-brand-blue shadow-sm" />
-             </div>
-             <div>
-               <label className="block text-sm font-medium text-gray-700 mb-1">Social Security Number</label>
-               <p className="text-sm pt-2 text-gray-500 font-medium">***-**-{user?.ssnLast4 || '****'} (Masked)</p>
-             </div>
-             <div className="md:col-span-2">
-               <label className="block text-sm font-medium text-gray-700 mb-1">Street Address</label>
-               <input type="text" name="address" value={formData.address} onChange={handleChange} className="w-full border-gray-300 rounded focus:border-brand-blue focus:ring-brand-blue shadow-sm" />
-               <p className="text-xs text-gray-400 mt-2">Required for home equity and loan applications.</p>
-             </div>
-             <div>
-               <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
-               <input type="text" name="city" value={formData.city} onChange={handleChange} className="w-full border-gray-300 rounded focus:border-brand-blue focus:ring-brand-blue shadow-sm" />
-             </div>
-             <div>
-               <label className="block text-sm font-medium text-gray-700 mb-1">State / Zip</label>
-               <div className="flex gap-2">
-                 <input type="text" name="state" value={formData.state} onChange={handleChange} className="w-1/3 border-gray-300 rounded focus:border-brand-blue focus:ring-brand-blue uppercase shadow-sm" maxLength="2" placeholder="CA" />
-                 <input type="text" name="zipCode" value={formData.zipCode} onChange={handleChange} className="w-2/3 border-gray-300 rounded focus:border-brand-blue focus:ring-brand-blue shadow-sm" placeholder="94105" />
-               </div>
              </div>
            </div>
 
