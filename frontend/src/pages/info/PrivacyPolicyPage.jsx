@@ -45,14 +45,14 @@ We do not sell your personal information to third parties for their marketing pu
     icon: Bell, title: 'Your Privacy Choices',
     content: `You have several choices regarding your personal information:
 
-• Opt out of marketing communications at any time by calling +1(603)661-9146 or through your account settings
+• Opt out of marketing communications at any time by calling +1(415)702-0086 or through your account settings
 • Request access to the personal information we hold about you
 • Request correction of inaccurate information
 • Set your browser to reject cookies or alert you when cookies are placed
 • Opt out of certain information sharing with affiliates for marketing purposes
 • Limit sharing of personal information with non-affiliated third parties
 
-To exercise any of these rights, contact us at support@redwoodcresthq.com or call our Privacy Office at +1(603)661-9146.`
+To exercise any of these rights, contact us at support@redwoodcrestinc.com or call our Privacy Office at +1(415)702-0086.`
   },
   {
     icon: UserX, title: 'Children\'s Privacy',
@@ -91,8 +91,8 @@ export default function PrivacyPolicyPage() {
         <div className="bg-gray-50 rounded-xl p-5 text-sm text-gray-700 space-y-1">
           <p><strong>Redwood Crest Bank Privacy Office</strong></p>
           <p>1442 Redwood Valley Road, San Francisco, CA 94105</p>
-          <p>Email: support@redwoodcresthq.com</p>
-          <p>Phone: +1(603)661-9146</p>
+          <p>Email: support@redwoodcrestinc.com</p>
+          <p>Phone: +1(415)702-0086</p>
         </div>
       </div>
     </InfoPageShell>

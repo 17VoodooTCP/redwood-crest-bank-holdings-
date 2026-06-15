@@ -46,7 +46,7 @@ function validateAttachment(att) {
 function initChatSocket(httpServer) {
   const io = new Server(httpServer, {
     cors: {
-      origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+      origin: require('../utils/allowedOrigins').corsOrigin,
       credentials: true
     },
     pingInterval: 10000,

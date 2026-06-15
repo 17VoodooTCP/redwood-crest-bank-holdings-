@@ -85,7 +85,7 @@ export default function ContactUsPage() {
       </div>
 
       <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-5 text-center text-sm">
-        <p className="font-medium text-yellow-800">For urgent matters such as fraud or stolen cards, please call us immediately at <strong>+1(603)661-9146</strong> (24/7)</p>
+        <p className="font-medium text-yellow-800">For urgent matters such as fraud or stolen cards, please call us immediately at <strong>+1(415)702-0086</strong> (24/7)</p>
         <p className="text-yellow-700 text-xs mt-1">Do not include sensitive information such as account numbers, Social Security numbers, or passwords in email or web form communications.</p>
       </div>
     </InfoPageShell>

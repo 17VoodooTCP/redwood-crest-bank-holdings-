@@ -10,12 +10,12 @@ const contactMethods = [
 ];
 
 const departments = [
-  { name: 'General Banking', phone: '+1(603)661-9146', hours: '24/7' },
-  { name: 'Credit Card Services', phone: '+1(603)661-9146', hours: '24/7' },
-  { name: 'Mortgage & Home Equity', phone: '+1(603)661-9146', hours: 'Mon-Fri 8 AM - 9 PM ET' },
-  { name: 'Wire Transfers', phone: '+1(603)661-9146', hours: 'Mon-Fri 8 AM - 8 PM ET' },
-  { name: 'Fraud & Security', phone: '+1(603)661-9146', hours: '24/7' },
-  { name: 'International Services', phone: '+1(603)661-9146', hours: 'Mon-Fri 9 AM - 6 PM ET' },
+  { name: 'General Banking', phone: '+1(415)702-0086', hours: '24/7' },
+  { name: 'Credit Card Services', phone: '+1(415)702-0086', hours: '24/7' },
+  { name: 'Mortgage & Home Equity', phone: '+1(415)702-0086', hours: 'Mon-Fri 8 AM - 9 PM ET' },
+  { name: 'Wire Transfers', phone: '+1(415)702-0086', hours: 'Mon-Fri 8 AM - 8 PM ET' },
+  { name: 'Fraud & Security', phone: '+1(415)702-0086', hours: '24/7' },
+  { name: 'International Services', phone: '+1(415)702-0086', hours: 'Mon-Fri 9 AM - 6 PM ET' },
 ];
 
 const quickHelp = [

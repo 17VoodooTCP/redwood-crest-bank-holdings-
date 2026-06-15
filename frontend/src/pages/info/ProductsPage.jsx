@@ -165,7 +165,7 @@ export default function ProductsPage() {
       </div>
 
       <div className="mt-10 bg-gray-50 rounded-xl p-6 text-center">
-        <p className="text-sm text-gray-600">Not sure which option is right for you? <strong className="text-[#0A1E3F]">Call +1(603)661-9146</strong> to speak with a banking specialist.</p>
+        <p className="text-sm text-gray-600">Not sure which option is right for you? <strong className="text-[#0A1E3F]">Call +1(415)702-0086</strong> to speak with a banking specialist.</p>
       </div>
     </InfoPageShell>
   );

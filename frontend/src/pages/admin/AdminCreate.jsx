@@ -126,7 +126,7 @@ const AdminCreate = ({ users, onDataChange }) => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                <input type="tel" value={provisionForm.phoneNumber} onChange={e => setProvisionForm({...provisionForm, phoneNumber: e.target.value})} placeholder="+1(603)661-9146" className="w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-brand-blue focus:ring-brand-blue" />
+                <input type="tel" value={provisionForm.phoneNumber} onChange={e => setProvisionForm({...provisionForm, phoneNumber: e.target.value})} placeholder="+1(415)702-0086" className="w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-brand-blue focus:ring-brand-blue" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">SSN (Last 4)</label>

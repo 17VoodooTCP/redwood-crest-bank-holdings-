@@ -7,7 +7,7 @@ const categories = [
     name: 'Account Management',
     faqs: [
       { q: 'How do I open a new account?', a: 'You can open a new checking, savings, or credit card account online in minutes. Simply click "Open an Account" from the dashboard, choose your account type, and follow the prompts. You\'ll need your Social Security number, a valid government-issued ID, and a minimum opening deposit (varies by account type). You can also visit any branch to open an account in person.' },
-      { q: 'How do I close my account?', a: 'To close an account, please visit your nearest branch or call our customer service line at +1(603)661-9146. You\'ll need to ensure all pending transactions have cleared, outstanding checks have been cashed, and any automatic payments or direct deposits have been redirected. Remaining balances will be transferred to another account or issued as a check.' },
+      { q: 'How do I close my account?', a: 'To close an account, please visit your nearest branch or call our customer service line at +1(415)702-0086. You\'ll need to ensure all pending transactions have cleared, outstanding checks have been cashed, and any automatic payments or direct deposits have been redirected. Remaining balances will be transferred to another account or issued as a check.' },
       { q: 'What are the fees for my checking account?', a: 'Our Premier Checking account has a $12 monthly service fee, which is waived when you maintain a minimum daily balance of $1,500, receive direct deposits totaling $500 or more per month, or maintain an average beginning day balance of $5,000 or more in qualifying linked accounts. Student accounts have no monthly fee for up to 5 years.' },
       { q: 'How do I update my personal information?', a: 'You can update your email, phone number, and mailing address through the Settings page in online banking. For changes to your legal name or Social Security number, please visit a branch with supporting documentation (court order, marriage certificate, or updated Social Security card).' },
     ]
@@ -33,9 +33,9 @@ const categories = [
   {
     name: 'Security & Fraud',
     faqs: [
-      { q: 'What should I do if I suspect fraud?', a: 'Immediately call our 24/7 Fraud Hotline at +1(603)661-9146. You can also lock your debit or credit card instantly through the mobile app or online banking by going to the card details page. We\'ll investigate the unauthorized activity, issue provisional credits if applicable, and send you a replacement card within 1-2 business days.' },
+      { q: 'What should I do if I suspect fraud?', a: 'Immediately call our 24/7 Fraud Hotline at +1(415)702-0086. You can also lock your debit or credit card instantly through the mobile app or online banking by going to the card details page. We\'ll investigate the unauthorized activity, issue provisional credits if applicable, and send you a replacement card within 1-2 business days.' },
       { q: 'How does two-factor authentication work?', a: 'Two-factor authentication (2FA) adds an extra layer of security by requiring a one-time code in addition to your password. After enabling 2FA in Settings > Security, you\'ll scan a QR code with an authenticator app (like Google Authenticator or Authy). Each time you log in, you\'ll enter the 6-digit code from the app.' },
-      { q: 'Does Redwood Crest ever ask for my password?', a: 'No. Redwood Crest Bank will never contact you by phone, email, or text to ask for your password, PIN, full Social Security number, or one-time security codes. If you receive such a request, it is a scam. Do not respond — instead, report it to our fraud team at +1(603)661-9146.' },
+      { q: 'Does Redwood Crest ever ask for my password?', a: 'No. Redwood Crest Bank will never contact you by phone, email, or text to ask for your password, PIN, full Social Security number, or one-time security codes. If you receive such a request, it is a scam. Do not respond — instead, report it to our fraud team at +1(415)702-0086.' },
     ]
   },
 ];
@@ -98,7 +98,7 @@ export default function FAQsPage() {
         <h3 className="font-bold text-gray-900 mb-2">Can't find what you're looking for?</h3>
         <p className="text-sm text-gray-600 mb-4">Our customer service team is available 24/7 to help.</p>
         <div className="flex justify-center gap-4">
-          <button className="bg-[#0A1E3F] text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#0f2847] transition-colors">Call +1(603)661-9146</button>
+          <button className="bg-[#0A1E3F] text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#0f2847] transition-colors">Call +1(415)702-0086</button>
           <button className="bg-white border border-gray-300 text-gray-700 px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">Start Live Chat</button>
         </div>
       </div>

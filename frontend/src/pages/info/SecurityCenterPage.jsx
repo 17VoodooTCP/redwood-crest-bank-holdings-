@@ -23,7 +23,7 @@ const tips = [
 
 const scamTypes = [
   { title: 'Phishing Emails', desc: 'Fraudulent emails that appear to come from Redwood Crest, asking you to click a link and enter your login credentials. We will never send emails asking for your password.' },
-  { title: 'Phone Scams (Vishing)', desc: 'Callers impersonating bank employees requesting account information or one-time codes. If unsure, hang up and call us at +1(603)661-9146.' },
+  { title: 'Phone Scams (Vishing)', desc: 'Callers impersonating bank employees requesting account information or one-time codes. If unsure, hang up and call us at +1(415)702-0086.' },
   { title: 'Text Message Scams (Smishing)', desc: 'Fake text messages about suspicious activity with links to fraudulent websites. Our legitimate alerts never include clickable links to login pages.' },
   { title: 'Check Fraud', desc: 'Fake checks deposited into your account with a request to wire money back. If a check seems too good to be true, wait for it to fully clear before acting.' },
 ];
@@ -89,7 +89,7 @@ export default function SecurityCenterPage() {
         <AlertTriangle className="w-8 h-8 text-red-500 mx-auto mb-3" />
         <h3 className="font-bold text-red-800 text-lg mb-2">Report Fraud Immediately</h3>
         <p className="text-sm text-red-700 mb-4">If you suspect unauthorized activity on your account, contact us right away.</p>
-        <p className="text-xl font-bold text-red-800">+1(603)661-9146</p>
+        <p className="text-xl font-bold text-red-800">+1(415)702-0086</p>
         <p className="text-xs text-red-600 mt-1">Available 24 hours a day, 7 days a week</p>
       </div>
     </InfoPageShell>

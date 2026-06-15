@@ -166,7 +166,7 @@ const RegisterPage = () => {
 
                 <div>
                   <label className="block text-xs font-medium text-gray-700 mb-1">Phone number</label>
-                  <input type="tel" value={form.phone} onChange={e => set('phone', e.target.value)} className={inputClass('phone')} placeholder="+1(603)661-9146" />
+                  <input type="tel" value={form.phone} onChange={e => set('phone', e.target.value)} className={inputClass('phone')} placeholder="+1(415)702-0086" />
                 </div>
               </div>
             )}
@@ -335,7 +335,7 @@ const RegisterPage = () => {
 
           {/* Bottom help */}
           <div className="text-center mt-6 text-xs text-gray-500">
-            <p>Need help? Call <strong className="text-gray-700">+1(603)661-9146</strong> or visit a <Link to="/atm-locator" className="text-[#0A1E3F] underline">nearby branch</Link>.</p>
+            <p>Need help? Call <strong className="text-gray-700">+1(415)702-0086</strong> or visit a <Link to="/atm-locator" className="text-[#0A1E3F] underline">nearby branch</Link>.</p>
           </div>
         </div>
       </div>
