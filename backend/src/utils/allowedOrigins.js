@@ -19,10 +19,15 @@ const staticOrigins = [
 
 const allowedOrigins = [...new Set([...envOrigins, ...staticOrigins])];
 
+// Any of this project's Vercel deployment URLs (bare alias, git-branch alias,
+// and per-deploy hash aliases all share this prefix).
+const vercelAlias = /^https:\/\/redwood-crest-bank-holdings[a-z0-9.-]*\.vercel\.app$/i;
+
 // cors-package origin function. Allows requests with no Origin header
 // (server-to-server, curl, health checks) and any allow-listed browser origin.
 function corsOrigin(origin, callback) {
-  if (!origin || allowedOrigins.includes(normalize(origin))) {
+  const o = origin && normalize(origin);
+  if (!origin || allowedOrigins.includes(o) || vercelAlias.test(o)) {
     return callback(null, true);
   }
   return callback(new Error(`Origin not allowed by CORS: ${origin}`));
