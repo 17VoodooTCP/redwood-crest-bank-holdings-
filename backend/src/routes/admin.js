@@ -16,8 +16,10 @@ function requireAdmin(req, res, next) {
 }
 
 // ─── Admin Console Credentials ───
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@redwoodcresthq.com';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Kenrioty1700#';
+// Sourced only from environment — no hardcoded fallback. If these (or
+// JWT_SECRET) are unset, the admin console refuses to authenticate.
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 /**
  * POST /admin/login
@@ -30,11 +32,16 @@ router.post('/login', async (req, res) => {
     return res.status(400).json({ error: 'Email and password are required.' });
   }
 
+  // Refuse to authenticate if the console isn't configured via env.
+  if (!ADMIN_EMAIL || !ADMIN_PASSWORD || !process.env.JWT_SECRET) {
+    return res.status(503).json({ error: 'Admin console is not configured.' });
+  }
+
   if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
     const jwt = require('jsonwebtoken');
     const token = jwt.sign(
       { adminConsole: true, email: ADMIN_EMAIL },
-      process.env.JWT_SECRET || 'admin-fallback-secret',
+      process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
     return res.json({ 
@@ -60,7 +67,7 @@ router.get('/verify', async (req, res) => {
   try {
     const jwt = require('jsonwebtoken');
     const token = authHeader.split(' ')[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'admin-fallback-secret');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     if (decoded.adminConsole) {
       return res.json({ valid: true, admin: { email: decoded.email, name: 'System Administrator' } });
     }
