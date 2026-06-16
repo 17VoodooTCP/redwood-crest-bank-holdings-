@@ -109,7 +109,6 @@ const LoginPage = () => {
             <p className="text-sm font-medium tracking-wide mb-1 text-blue-200">Welcome offer</p>
             <div className="text-5xl md:text-6xl font-bold mb-2">$350</div>
             <h1 className="text-2xl md:text-3xl font-bold mb-3 leading-tight">New Redwood Crest checking customers</h1>
-            <p className="text-blue-100 text-sm mb-6 leading-relaxed">Open a Redwood Crest Premier Checking® account with qualifying direct deposit activities.</p>
             <div className="flex flex-wrap items-center gap-3">
               <Link to="/register" className="inline-block bg-white text-[#0A1E3F] font-semibold text-sm px-6 py-3 rounded hover:bg-gray-100 transition-colors">
                 Open an account
